@@ -3,7 +3,7 @@ from __future__ import annotations
 from werkzeug.security import generate_password_hash
 
 
-STUDENT_NAMES = [
+INDIAN_STUDENT_NAMES = [
     "Prashant Waje",
     "Pooja Shirsat",
     "Akash Jadhav",
