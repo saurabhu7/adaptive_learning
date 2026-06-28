@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Course{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Edit Course</h1>
+    <p>Update course details, category, video links, and notes without changing the existing structure.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="page-card">
+        <form action="{{ url_for('update_course', course_id=course.id) }}" method="post" enctype="multipart/form-data">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="course_name">Course Title</label>
+                    <input id="course_name" name="course_name" type="text" value="{{ course.title }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input id="subject" name="subject" type="text" value="{{ course.subject }}" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="it" {% if course.category == 'it' %}selected{% endif %}>IT</option>
+                        <option value="non-it" {% if course.category == 'non-it' %}selected{% endif %}>Non-IT</option>
+                        <option value="datascience" {% if course.category == 'datascience' %}selected{% endif %}>Data Science</option>
+                        <option value="softskills" {% if course.category == 'softskills' %}selected{% endif %}>Soft Skills</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="course_index">Course Order</label>
+                    <input id="course_index" name="course_index" type="number" min="1" value="{{ course.course_index }}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input id="description" name="description" type="text" value="{{ course.description }}" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="pdf">Replace PDF Notes (Optional)</label>
+                    <input id="pdf" name="pdf" type="file" accept=".pdf,application/pdf">
+                </div>
+                <div class="form-group">
+                    <label for="youtube">YouTube URL</label>
+                    <input id="youtube" name="youtube" type="url" value="{{ course.youtube_url or '' }}">
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn">Update Course</button>
+                <a class="btn btn-secondary" href="{{ url_for('show_courses') }}">Back to Courses</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Learning Platform{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .shell {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 150px 20px 40px;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 78px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #0f766e 0%, #155e75 48%, #1d4ed8 100%);
+            border-bottom: 0;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .topbar nav {
+            position: static;
+            height: auto;
+            background: transparent;
+            box-shadow: none;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .topbar nav a {
+            padding: 10px 14px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .topbar nav a:hover {
+            background: rgba(255, 255, 255, 0.24);
+            border-color: rgba(255, 255, 255, 0.58);
+            padding: 10px 14px;
+        }
+
+        .role-tabs {
+            position: fixed;
+            top: 78px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: #0f172a;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .role-tabs-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .role-tab {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .role-tab:hover {
+            background: #1d4ed8;
+            border-color: #60a5fa;
+            color: #fff;
+        }
+
+        .page-card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            padding: 28px;
+        }
+
+        .hero {
+            margin-bottom: 24px;
+            padding: 28px;
+            border-radius: 22px;
+            color: #fff;
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #0ea5e9 100%);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+        }
+
+        .hero h1 {
+            margin-bottom: 8px;
+            font-size: 34px;
+        }
+
+        .hero p {
+            opacity: 0.92;
+            max-width: 760px;
+        }
+
+        .flash-stack {
+            margin-bottom: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .muted {
+            color: var(--text-light);
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #ecfeff;
+            color: #155e75;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .list-clean {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .list-item:last-child {
+            border-bottom: 0;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .topbar-inner {
+                flex-direction: column;
+                justify-content: center;
+                padding: 10px 16px;
+            }
+
+            .topbar {
+                height: auto;
+            }
+
+            .shell {
+                padding-top: 200px;
+            }
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{{ url_for('dashboard') if current_user else url_for('login') }}">Adaptive Learning Platform</a>
+            <nav>
+                {% if current_user %}
+                    <span class="pill">{{ current_user['role']|title }}</span>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+    {% if current_user %}
+        <div class="role-tabs">
+            <div class="role-tabs-inner">
+                {% if current_user['role'] == 'student' %}
+                    <a class="role-tab" href="{{ url_for('student_dashboard') }}">Student Dashboard</a>
+                    <a class="role-tab" href="{{ url_for('show_courses') }}">All Courses</a>
+                    <a class="role-tab" href="{{ url_for('live_lecture_schedule') }}">Live Lecture</a>
+                    <a class="role-tab" href="{{ url_for('doubt_chat') }}">Doubt Discussion</a>
+                    <a class="role-tab" href="{{ url_for('exam_home') }}">Exam</a>
+                {% elif current_user['role'] == 'teacher' %}
+                    <a class="role-tab" href="{{ url_for('teacher_dashboard') }}">Teacher Dashboard</a>
+                    <a class="role-tab" href="{{ url_for('show_courses') }}">All Courses</a>
+                    <a class="role-tab" href="{{ url_for('addcourse') }}">Add Course</a>
+                    <a class="role-tab" href="{{ url_for('teacher_live_meetings') }}">Live Meetings</a>
+                    <a class="role-tab" href="{{ url_for('doubt_chat') }}">Doubt Discussion</a>
+                    <a class="role-tab" href="{{ url_for('view_students') }}">Students</a>
+                    <a class="role-tab" href="{{ url_for('teacher_subscription_catalog') }}">Catalog</a>
+                {% elif current_user['role'] == 'admin' %}
+                    <a class="role-tab" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                    <a class="role-tab" href="{{ url_for('show_courses') }}">All Courses</a>
+                    <a class="role-tab" href="{{ url_for('addcourse') }}">Add Course</a>
+                    <a class="role-tab" href="{{ url_for('teacher_live_meetings') }}">Live Meetings</a>
+                    <a class="role-tab" href="{{ url_for('doubt_chat') }}">Doubt Discussion</a>
+                    <a class="role-tab" href="{{ url_for('view_students') }}">Students</a>
+                    <a class="role-tab" href="{{ url_for('teacher_subscription_catalog') }}">Catalog</a>
+                    <a class="role-tab" href="{{ url_for('view_teachers') }}">Teachers</a>
+                    <a class="role-tab" href="{{ url_for('result_exam') }}">Exam Results</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <main class="shell">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="alert {% if category == 'success' %}alert-success{% elif category == 'warning' %}alert-warning{% elif category == 'error' %}alert-error{% else %}alert-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

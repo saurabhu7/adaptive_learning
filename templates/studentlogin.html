@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Learning Platform Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, #0f766e 0%, #155e75 45%, #1d4ed8 100%);
+        }
+
+        .login-brand {
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .login-brand h1 {
+            margin: 0 0 8px;
+            font-size: 40px;
+            line-height: 1.1;
+            font-weight: 900;
+        }
+
+        .login-brand p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.96);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.35);
+        }
+
+        .auth-card h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .auth-card p {
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .helper {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .helper a {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .demo-box {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 14px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 13px;
+        }
+
+        .demo-box strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .credential-row {
+            display: grid;
+            grid-template-columns: 74px 1fr;
+            gap: 8px;
+            padding: 7px 0;
+            border-top: 1px solid #bfdbfe;
+        }
+
+        .credential-row:first-of-type {
+            border-top: 0;
+        }
+
+        .credential-role {
+            font-weight: 800;
+            color: #0f766e;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-brand">
+        <h1>Adaptive Learning Platform</h1>
+        <p>Official login for students, teachers, and administrators</p>
+    </div>
+
+    <div class="auth-card">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {% if category == 'success' %}alert-success{% elif category == 'warning' %}alert-warning{% else %}alert-error{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h1>Sign in</h1>
+        <p>Access the student, teacher, or admin dashboard with one working login flow.</p>
+
+        <form method="post">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <input id="email" type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input id="password" type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group">
+                <label for="role"><i class="fas fa-user-tag"></i> Role</label>
+                <select id="role" name="role" required>
+                    <option value="">Select role</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-full">Login</button>
+        </form>
+
+        <div class="helper">
+            New here? <a href="{{ url_for('register') }}">Create an account</a>
+        </div>
+
+        <div class="demo-box">
+            <strong>Valid demo credentials</strong>
+            <div class="credential-row">
+                <span class="credential-role">Student</span>
+                <span>nikhil.bhosale@demo.com / student13</span>
+            </div>
+            <div class="credential-row">
+                <span class="credential-role">Teacher</span>
+                <span>sanjay.kulkarni@gmail.com / teacher123</span>
+            </div>
+            <div class="credential-row">
+                <span class="credential-role">Admin</span>
+                <span>aniket.deshmukh@gmail.com / admin123</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

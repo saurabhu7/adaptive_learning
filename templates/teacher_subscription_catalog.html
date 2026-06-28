@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Subscription Catalog{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Subscription Catalog</h1>
+    <p>Teacher-created courses with subscribed students, exam attempts, and payment status.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Course Subscription Summary</h2>
+                <p>Only courses created by this teacher are shown here.</p>
+            </div>
+        </div>
+        {% if course_rows %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Subject</th>
+                            <th>Subscribed Students</th>
+                            <th>Total Amount</th>
+                            <th>Exam Attempts</th>
+                            <th>Avg Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in course_rows %}
+                            <tr>
+                                <td>{{ row.title }}</td>
+                                <td>{{ row.category|category_label }}</td>
+                                <td>{{ row.subject }}</td>
+                                <td>{{ row.subscriber_count }}</td>
+                                <td>Rs. {{ row.total_amount }}</td>
+                                <td>{{ row.exam_attempts }}</td>
+                                <td>{{ row.average_score }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No teacher-created courses available yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Subscribed Student List</h2>
+                <p>Course-wise student catalog for follow-up, live meetings, and doubt discussion.</p>
+            </div>
+        </div>
+        {% if subscriber_rows %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Subscribed On</th>
+                            <th>Exam Attempts</th>
+                            <th>Avg Score</th>
+                            <th>Chat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in subscriber_rows %}
+                            <tr>
+                                <td>{{ row.username }}</td>
+                                <td>{{ row.email }}</td>
+                                <td>{{ row.course_title }}</td>
+                                <td>{{ row.category|category_label }}</td>
+                                <td>Rs. {{ row.price }}</td>
+                                <td>{{ row.created_at }}</td>
+                                <td>{{ row.exam_attempts }}</td>
+                                <td>{{ row.average_score }}%</td>
+                                <td>
+                                    <a class="btn btn-small" href="{{ url_for('doubt_chat', room='course:' ~ row.course_id) }}">Course Chat</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">Subscribed students will appear after students activate course access.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

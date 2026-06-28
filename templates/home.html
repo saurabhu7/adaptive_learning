@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Choose a Category</h1>
+    <p>Pick your learning track, record your current mood, and get suggested courses in the right order.</p>
+</section>
+
+<div class="page-card">
+    <div class="grid">
+        {% for category in categories %}
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-compass"></i></div>
+                <h3>{{ category.category|category_label }}</h3>
+                <p>{{ category.total }} course(s) available.</p>
+                <div class="card-footer">
+                    <a class="btn" href="{{ url_for('check_mood', category=category.category) }}">Start</a>
+                    <a class="btn btn-secondary" href="{{ url_for('exam', category=category.category) }}">Exam</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

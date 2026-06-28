@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}All Results{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Exam Results</h1>
+    <p>All recorded exam attempts across students.</p>
+</section>
+
+<div class="page-card">
+    {% if records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Email</th>
+                    <th>Category</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.username }}</td>
+                        <td>{{ row.email }}</td>
+                        <td>{{ row.category|category_label }}</td>
+                        <td>{{ row.score }}/{{ row.total_questions }}</td>
+                        <td>{{ row.created_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="muted">No results available.</p>
+    {% endif %}
+</div>
+{% endblock %}

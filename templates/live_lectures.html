@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Live Lecture Timetable{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Live Lecture Timetable</h1>
+    <p>Join scheduled live classes from the teacher's Google Meet link.</p>
+</section>
+
+<div class="page-card">
+    <div class="section-head">
+        <div>
+            <h2>Upcoming Live Lectures</h2>
+            <p>Use the joining link at class time.</p>
+        </div>
+    </div>
+    {% if meetings %}
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Course</th>
+                        <th>Teacher</th>
+                        <th>Meeting</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for meeting in meetings %}
+                        <tr>
+                            <td>{{ meeting.meeting_date }}</td>
+                            <td>
+                                {{ meeting.start_time }}
+                                {% if meeting.end_time %} - {{ meeting.end_time }}{% endif %}
+                            </td>
+                            <td>
+                                <strong>{{ meeting.title }}</strong><br>
+                                <span class="muted">{{ meeting.course_title }} | {{ meeting.subject }}</span>
+                            </td>
+                            <td>{{ meeting.teacher_name }}</td>
+                            <td>
+                                <a class="btn btn-small" href="{{ meeting.meet_link }}" target="_blank" rel="noopener">Join Google Meet</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state">No live lectures are scheduled yet. Please check again after your teacher organizes a meeting.</p>
+    {% endif %}
+</div>
+{% endblock %}

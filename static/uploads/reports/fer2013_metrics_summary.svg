@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+<rect width="1200" height="900" fill="#f4f7fb"/><rect x="40" y="35" width="1120" height="830" rx="14" fill="white" stroke="#d7dee9"/>
+<text x="70" y="85" font-family="Arial" font-size="30" font-weight="700" fill="#111827">FER2013 Emotion Model Evaluation</text>
+<rect x="70" y="115" width="245" height="95" rx="8" fill="#f9fbff" stroke="#dbe3ef"/>
+<text x="88" y="145" font-family="Arial" font-size="14" font-weight="700" fill="#64748b">Training Accuracy</text>
+<text x="88" y="185" font-family="Arial" font-size="32" font-weight="800" fill="#111827">44.03%</text>
+<rect x="340" y="115" width="245" height="95" rx="8" fill="#f9fbff" stroke="#dbe3ef"/>
+<text x="358" y="145" font-family="Arial" font-size="14" font-weight="700" fill="#64748b">Validation Accuracy</text>
+<text x="358" y="185" font-family="Arial" font-size="32" font-weight="800" fill="#111827">38.35%</text>
+<rect x="610" y="115" width="245" height="95" rx="8" fill="#f9fbff" stroke="#dbe3ef"/>
+<text x="628" y="145" font-family="Arial" font-size="14" font-weight="700" fill="#64748b">Test Accuracy</text>
+<text x="628" y="185" font-family="Arial" font-size="32" font-weight="800" fill="#111827">38.56%</text>
+<rect x="880" y="115" width="245" height="95" rx="8" fill="#f9fbff" stroke="#dbe3ef"/>
+<text x="898" y="145" font-family="Arial" font-size="14" font-weight="700" fill="#64748b">Macro F1</text>
+<text x="898" y="185" font-family="Arial" font-size="32" font-weight="800" fill="#111827">31.09%</text>
+<text x="70" y="255" font-family="Arial" font-size="22" font-weight="700" fill="#111827">Classification Metrics</text>
+<text x="70" y="290" font-family="Arial" font-size="15" font-weight="700">Class</text><text x="245" y="290" font-family="Arial" font-size="15" font-weight="700">Precision</text><text x="405" y="290" font-family="Arial" font-size="15" font-weight="700">Recall</text><text x="545" y="290" font-family="Arial" font-size="15" font-weight="700">F1-score</text><text x="700" y="290" font-family="Arial" font-size="15" font-weight="700">Support</text>
+<text x="70" y="320" font-family="Arial" font-size="15">angry</text><text x="245" y="320" font-family="Arial" font-size="15">23.99%</text><text x="405" y="320" font-family="Arial" font-size="15">37.89%</text><text x="545" y="320" font-family="Arial" font-size="15">29.38%</text><text x="700" y="320" font-family="Arial" font-size="15">958</text>
+<text x="70" y="348" font-family="Arial" font-size="15">disgust</text><text x="245" y="348" font-family="Arial" font-size="15">0.00%</text><text x="405" y="348" font-family="Arial" font-size="15">0.00%</text><text x="545" y="348" font-family="Arial" font-size="15">0.00%</text><text x="700" y="348" font-family="Arial" font-size="15">111</text>
+<text x="70" y="376" font-family="Arial" font-size="15">fear</text><text x="245" y="376" font-family="Arial" font-size="15">24.67%</text><text x="405" y="376" font-family="Arial" font-size="15">25.39%</text><text x="545" y="376" font-family="Arial" font-size="15">25.02%</text><text x="700" y="376" font-family="Arial" font-size="15">1024</text>
+<text x="70" y="404" font-family="Arial" font-size="15">happy</text><text x="245" y="404" font-family="Arial" font-size="15">52.88%</text><text x="405" y="404" font-family="Arial" font-size="15">63.19%</text><text x="545" y="404" font-family="Arial" font-size="15">57.58%</text><text x="700" y="404" font-family="Arial" font-size="15">1774</text>
+<text x="70" y="432" font-family="Arial" font-size="15">neutral</text><text x="245" y="432" font-family="Arial" font-size="15">40.02%</text><text x="405" y="432" font-family="Arial" font-size="15">29.44%</text><text x="545" y="432" font-family="Arial" font-size="15">33.93%</text><text x="700" y="432" font-family="Arial" font-size="15">1233</text>
+<text x="70" y="460" font-family="Arial" font-size="15">sad</text><text x="245" y="460" font-family="Arial" font-size="15">35.32%</text><text x="405" y="460" font-family="Arial" font-size="15">15.72%</text><text x="545" y="460" font-family="Arial" font-size="15">21.75%</text><text x="700" y="460" font-family="Arial" font-size="15">1247</text>
+<text x="70" y="488" font-family="Arial" font-size="15">surprise</text><text x="245" y="488" font-family="Arial" font-size="15">45.19%</text><text x="405" y="488" font-family="Arial" font-size="15">55.96%</text><text x="545" y="488" font-family="Arial" font-size="15">50.00%</text><text x="700" y="488" font-family="Arial" font-size="15">831</text>
+<text x="70" y="536" font-family="Arial" font-size="16" font-weight="700">Weighted Avg: Precision 38.03% | Recall 38.56% | F1 37.12%</text>
+<text x="70" y="560" font-family="Arial" font-size="22" font-weight="700" fill="#111827">Confusion Matrix</text>
+<text x="170" y="590" font-family="Arial" font-size="12" text-anchor="middle">angry</text>
+<text x="220" y="590" font-family="Arial" font-size="12" text-anchor="middle">disgust</text>
+<text x="270" y="590" font-family="Arial" font-size="12" text-anchor="middle">fear</text>
+<text x="320" y="590" font-family="Arial" font-size="12" text-anchor="middle">happy</text>
+<text x="370" y="590" font-family="Arial" font-size="12" text-anchor="middle">neutral</text>
+<text x="420" y="590" font-family="Arial" font-size="12" text-anchor="middle">sad</text>
+<text x="470" y="590" font-family="Arial" font-size="12" text-anchor="middle">surprise</text>
+<text x="145" y="630" font-family="Arial" font-size="12" text-anchor="end">angry</text>
+<rect x="146" y="600" width="48" height="48" fill="rgb(202,207,255)" stroke="#d8e0ec"/>
+<text x="170" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">363</text>
+<rect x="196" y="600" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="600" width="48" height="48" fill="rgb(226,231,255)" stroke="#d8e0ec"/>
+<text x="270" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">157</text>
+<rect x="296" y="600" width="48" height="48" fill="rgb(222,227,255)" stroke="#d8e0ec"/>
+<text x="320" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">192</text>
+<rect x="346" y="600" width="48" height="48" fill="rgb(231,236,255)" stroke="#d8e0ec"/>
+<text x="370" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">116</text>
+<rect x="396" y="600" width="48" height="48" fill="rgb(238,243,255)" stroke="#d8e0ec"/>
+<text x="420" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">56</text>
+<rect x="446" y="600" width="48" height="48" fill="rgb(236,241,255)" stroke="#d8e0ec"/>
+<text x="470" y="629" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">74</text>
+<text x="145" y="680" font-family="Arial" font-size="12" text-anchor="end">disgust</text>
+<rect x="146" y="650" width="48" height="48" fill="rgb(240,245,255)" stroke="#d8e0ec"/>
+<text x="170" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">37</text>
+<rect x="196" y="650" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="650" width="48" height="48" fill="rgb(241,246,255)" stroke="#d8e0ec"/>
+<text x="270" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">28</text>
+<rect x="296" y="650" width="48" height="48" fill="rgb(242,247,255)" stroke="#d8e0ec"/>
+<text x="320" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">25</text>
+<rect x="346" y="650" width="48" height="48" fill="rgb(243,248,255)" stroke="#d8e0ec"/>
+<text x="370" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">10</text>
+<rect x="396" y="650" width="48" height="48" fill="rgb(244,249,255)" stroke="#d8e0ec"/>
+<text x="420" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">5</text>
+<rect x="446" y="650" width="48" height="48" fill="rgb(244,249,255)" stroke="#d8e0ec"/>
+<text x="470" y="679" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">6</text>
+<text x="145" y="730" font-family="Arial" font-size="12" text-anchor="end">fear</text>
+<rect x="146" y="700" width="48" height="48" fill="rgb(217,222,255)" stroke="#d8e0ec"/>
+<text x="170" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">234</text>
+<rect x="196" y="700" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="700" width="48" height="48" fill="rgb(214,219,255)" stroke="#d8e0ec"/>
+<text x="270" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">260</text>
+<rect x="296" y="700" width="48" height="48" fill="rgb(224,229,255)" stroke="#d8e0ec"/>
+<text x="320" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">178</text>
+<rect x="346" y="700" width="48" height="48" fill="rgb(233,238,255)" stroke="#d8e0ec"/>
+<text x="370" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">100</text>
+<rect x="396" y="700" width="48" height="48" fill="rgb(235,240,255)" stroke="#d8e0ec"/>
+<text x="420" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">79</text>
+<rect x="446" y="700" width="48" height="48" fill="rgb(224,229,255)" stroke="#d8e0ec"/>
+<text x="470" y="729" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">173</text>
+<text x="145" y="780" font-family="Arial" font-size="12" text-anchor="end">happy</text>
+<rect x="146" y="750" width="48" height="48" fill="rgb(217,222,255)" stroke="#d8e0ec"/>
+<text x="170" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">240</text>
+<rect x="196" y="750" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="750" width="48" height="48" fill="rgb(230,235,255)" stroke="#d8e0ec"/>
+<text x="270" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">123</text>
+<rect x="296" y="750" width="48" height="48" fill="rgb(115,120,255)" stroke="#d8e0ec"/>
+<text x="320" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">1121</text>
+<rect x="346" y="750" width="48" height="48" fill="rgb(233,238,255)" stroke="#d8e0ec"/>
+<text x="370" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">99</text>
+<rect x="396" y="750" width="48" height="48" fill="rgb(233,238,255)" stroke="#d8e0ec"/>
+<text x="420" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">97</text>
+<rect x="446" y="750" width="48" height="48" fill="rgb(234,239,255)" stroke="#d8e0ec"/>
+<text x="470" y="779" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">94</text>
+<text x="145" y="830" font-family="Arial" font-size="12" text-anchor="end">neutral</text>
+<rect x="146" y="800" width="48" height="48" fill="rgb(217,222,255)" stroke="#d8e0ec"/>
+<text x="170" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">239</text>
+<rect x="196" y="800" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="800" width="48" height="48" fill="rgb(228,233,255)" stroke="#d8e0ec"/>
+<text x="270" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">139</text>
+<rect x="296" y="800" width="48" height="48" fill="rgb(213,218,255)" stroke="#d8e0ec"/>
+<text x="320" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">272</text>
+<rect x="346" y="800" width="48" height="48" fill="rgb(202,207,255)" stroke="#d8e0ec"/>
+<text x="370" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">363</text>
+<rect x="396" y="800" width="48" height="48" fill="rgb(233,238,255)" stroke="#d8e0ec"/>
+<text x="420" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">102</text>
+<rect x="446" y="800" width="48" height="48" fill="rgb(231,236,255)" stroke="#d8e0ec"/>
+<text x="470" y="829" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">118</text>
+<text x="145" y="880" font-family="Arial" font-size="12" text-anchor="end">sad</text>
+<rect x="146" y="850" width="48" height="48" fill="rgb(208,213,255)" stroke="#d8e0ec"/>
+<text x="170" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">312</text>
+<rect x="196" y="850" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="850" width="48" height="48" fill="rgb(218,223,255)" stroke="#d8e0ec"/>
+<text x="270" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">229</text>
+<rect x="296" y="850" width="48" height="48" fill="rgb(216,221,255)" stroke="#d8e0ec"/>
+<text x="320" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">249</text>
+<rect x="346" y="850" width="48" height="48" fill="rgb(226,231,255)" stroke="#d8e0ec"/>
+<text x="370" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">162</text>
+<rect x="396" y="850" width="48" height="48" fill="rgb(222,227,255)" stroke="#d8e0ec"/>
+<text x="420" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">196</text>
+<rect x="446" y="850" width="48" height="48" fill="rgb(233,238,255)" stroke="#d8e0ec"/>
+<text x="470" y="879" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">99</text>
+<text x="145" y="930" font-family="Arial" font-size="12" text-anchor="end">surprise</text>
+<rect x="146" y="900" width="48" height="48" fill="rgb(234,239,255)" stroke="#d8e0ec"/>
+<text x="170" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">88</text>
+<rect x="196" y="900" width="48" height="48" fill="rgb(245,250,255)" stroke="#d8e0ec"/>
+<text x="220" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">0</text>
+<rect x="246" y="900" width="48" height="48" fill="rgb(231,236,255)" stroke="#d8e0ec"/>
+<text x="270" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">118</text>
+<rect x="296" y="900" width="48" height="48" fill="rgb(235,240,255)" stroke="#d8e0ec"/>
+<text x="320" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">83</text>
+<rect x="346" y="900" width="48" height="48" fill="rgb(238,243,255)" stroke="#d8e0ec"/>
+<text x="370" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">57</text>
+<rect x="396" y="900" width="48" height="48" fill="rgb(242,247,255)" stroke="#d8e0ec"/>
+<text x="420" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">20</text>
+<rect x="446" y="900" width="48" height="48" fill="rgb(191,196,255)" stroke="#d8e0ec"/>
+<text x="470" y="929" font-family="Arial" font-size="12" text-anchor="middle" fill="#111827">465</text>
+</svg>

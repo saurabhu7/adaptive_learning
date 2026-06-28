@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Live Meetings{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Live Meetings</h1>
+    <p>Organize Google Meet classes and publish the timetable for students.</p>
+</section>
+
+<div class="grid-2">
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Organize Meeting</h2>
+                <p>Add a Google Meet link for a course lecture.</p>
+            </div>
+        </div>
+        <form method="post" action="{{ url_for('teacher_live_meetings') }}">
+            <div class="form-group">
+                <label for="course_id">Course</label>
+                <select id="course_id" name="course_id" required>
+                    <option value="">Select course</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.title }} - {{ course.subject }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="title">Lecture Title</label>
+                <input id="title" name="title" type="text" placeholder="Example: Data Science Doubt Session" required>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="meeting_date">Date</label>
+                    <input id="meeting_date" name="meeting_date" type="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="start_time">Start Time</label>
+                    <input id="start_time" name="start_time" type="time" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="end_time">End Time</label>
+                <input id="end_time" name="end_time" type="time">
+            </div>
+            <div class="form-group">
+                <label for="meet_link">Google Meet Link</label>
+                <input id="meet_link" name="meet_link" type="url" placeholder="https://meet.google.com/abc-defg-hij" required>
+            </div>
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="Optional instructions for students"></textarea>
+            </div>
+            <button class="btn" type="submit">Publish Meeting</button>
+        </form>
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Published Timetable</h2>
+                <p>Students will see these meetings in their Live Lecture tab.</p>
+            </div>
+        </div>
+        {% if meetings %}
+            <div class="activity-feed">
+                {% for meeting in meetings %}
+                    <div class="activity-item">
+                        <strong>{{ meeting.title }}</strong>
+                        <div class="muted">{{ meeting.course_title }} | {{ meeting.meeting_date }} at {{ meeting.start_time }}</div>
+                        {% if meeting.notes %}<p>{{ meeting.notes }}</p>{% endif %}
+                        <a class="btn btn-secondary btn-small" href="{{ meeting.meet_link }}" target="_blank" rel="noopener">Open Meet</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No Google Meet lectures have been published yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

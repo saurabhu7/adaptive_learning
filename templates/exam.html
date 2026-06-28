@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Exam Categories{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Practice Exams</h1>
+    <p>Open a category exam and your score will be saved automatically in the database.</p>
+</section>
+
+<div class="page-card">
+    <div class="section-head">
+        <div>
+            <h2>Auto-Generated Course Exams</h2>
+            <p>These exams are generated from teacher lecture playlists, transcript analysis, and AI notes pipeline.</p>
+        </div>
+    </div>
+    {% if course_exams %}
+        <div class="grid">
+            {% for exam in course_exams %}
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-brain"></i></div>
+                    <h3>{{ exam.title }}</h3>
+                    <p>{{ exam.category|category_label }} | {{ exam.subject }}</p>
+                    <div class="card-footer">
+                        <a class="btn" href="{{ url_for('exam_course', course_id=exam.id) }}">Start AI Exam</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">No AI-generated exams yet. Teacher can generate from dashboard.</p>
+    {% endif %}
+</div>
+
+<div class="page-card mt-20">
+    <div class="section-head">
+        <div>
+            <h2>Category Exams</h2>
+            <p>Default category-wise practice exams.</p>
+        </div>
+    </div>
+    <div class="grid">
+        {% for category in categories %}
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+                <h3>{{ category.category|category_label }}</h3>
+                <p>{{ category.total }} related course(s).</p>
+                <div class="card-footer">
+                    <a class="btn" href="{{ url_for('exam', category=category.category) }}">Start Exam</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

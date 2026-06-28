@@ -1,0 +1,1185 @@
+{% extends "base.html" %}
+{% block title %}Student Lecture{% endblock %}
+{% block head %}
+<style>
+    .shell {
+        max-width: calc(100vw - 24px);
+        padding: 130px 12px 20px;
+    }
+
+    .student-lecture {
+        display: grid;
+        gap: 14px;
+    }
+
+    .lecture-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(360px, 2fr);
+        gap: 14px;
+        align-items: start;
+    }
+
+    .lecture-stage,
+    .camera-stage {
+        overflow: hidden;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #081120 0%, #172036 100%);
+    }
+
+    .lecture-stage {
+        min-height: 520px;
+    }
+
+    .lecture-stage iframe,
+    .camera-stage video {
+        width: 100%;
+        display: block;
+        border: 0;
+    }
+
+    .lecture-stage iframe {
+        min-height: 520px;
+    }
+
+    .camera-stage video {
+        min-height: 320px;
+    }
+
+    .camera-stage {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .camera-badge {
+        position: absolute;
+        left: 16px;
+        bottom: 16px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(8, 17, 32, 0.82);
+        color: #f8fafc;
+        font-size: 13px;
+        font-weight: 700;
+    }
+    .camera-suggestion {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+        max-width: 60%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(8, 17, 32, 0.82);
+        color: #f8fafc;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .support-card {
+        padding: 16px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        max-height: calc(100vh - 170px);
+        overflow: auto;
+    }
+
+    .support-card h3 {
+        margin-bottom: 10px;
+    }
+
+    .signal-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #dbeafe;
+        color: #1d4ed8;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .quality-pill {
+        margin-left: 8px;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #fef3c7;
+        color: #92400e;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    .support-block + .support-block {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .support-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+
+    .support-text {
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        line-height: 1.7;
+    }
+
+    .support-text p {
+        margin: 0 0 8px;
+    }
+
+    .support-text p:last-child {
+        margin-bottom: 0;
+    }
+
+    .quiz-answer {
+        margin-top: 10px;
+        color: #475569;
+        font-size: 14px;
+    }
+
+    .explanation-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .language-select {
+        min-width: 150px;
+        padding: 8px 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .line-counter {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .mcq-options {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .mcq-btn {
+        width: 100%;
+        text-align: left;
+        border-radius: 12px;
+        padding: 10px 12px;
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        color: #0f172a;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .mcq-btn:hover {
+        background: #eff6ff;
+        border-color: #93c5fd;
+    }
+    .play-icon-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        border: 1px solid #93c5fd;
+        background: #eff6ff;
+        color: #1d4ed8;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .play-icon-link:hover {
+        background: #dbeafe;
+    }
+
+    .quiz-feedback {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        font-size: 14px;
+    }
+
+    .metric-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .metric-mini {
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        background: #f8fbff;
+        padding: 10px;
+    }
+
+    .metric-mini .k {
+        display: block;
+        font-size: 11px;
+        color: #475569;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .metric-mini .v {
+        display: block;
+        margin-top: 4px;
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .feed-item {
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+    }
+
+    .feed-item + .feed-item {
+        margin-top: 8px;
+    }
+
+    .support-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin: 10px 0 14px;
+    }
+
+    .support-tab-btn {
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        color: #1e293b;
+        border-radius: 10px;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .support-tab-btn.active {
+        background: #dbeafe;
+        border-color: #93c5fd;
+        color: #1d4ed8;
+    }
+
+    .support-panel {
+        display: none;
+    }
+
+    .support-panel.active {
+        display: block;
+    }
+
+    @media (max-width: 960px) {
+        .lecture-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .lecture-stage,
+        .lecture-stage iframe {
+            min-height: 320px;
+        }
+
+        .support-card {
+            max-height: none;
+            overflow: visible;
+        }
+
+        .support-tabs {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="student-lecture">
+    <section class="hero">
+        <h1>{{ course.title }}</h1>
+        <p>Watch the lecture, keep the camera on, and run full Predicting Best Learning Strategies Through Facial Expression Analysis with adaptive support, quiz, and notes.</p>
+    </section>
+
+    <div class="lecture-layout">
+        <div class="page-card">
+            <h2 class="mb-20">Lecture</h2>
+            {% if selected_lecture %}
+                <p class="mb-20"><span class="pill">Now Playing: {{ selected_lecture.title }}</span></p>
+            {% endif %}
+            {% if course.youtube_url %}
+                <div class="lecture-stage">
+                    <iframe
+                        src="{{ course.youtube_url|replace('watch?v=', 'embed/') }}"
+                        title="{{ course.title }}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            {% else %}
+                <div class="support-text">No lecture video has been added for this course yet.</div>
+            {% endif %}
+
+            {% if lectures %}
+                <div class="support-block mt-20">
+                    <span class="support-label">Course Lectures</span>
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Title</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lecture in lectures %}
+                                    <tr>
+                                        <td>{{ lecture.lecture_index }}</td>
+                                        <td>{{ lecture.title }}</td>
+                                        <td>
+                                            <a class="play-icon-link" href="{{ url_for('learn_course', course_id=course.id, lecture_id=lecture.id) }}" title="Play lecture" aria-label="Play lecture">▶</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="support-card">
+            <h3>Student Support</h3>
+            <span class="signal-pill" id="emotionStatus">Waiting for analysis</span>
+            <span class="quality-pill hidden" id="qualityStatus">Signal quality warning</span>
+            <div class="support-tabs">
+                <button type="button" class="support-tab-btn active" data-tab="tab-live">Live</button>
+                <button type="button" class="support-tab-btn" data-tab="tab-quiz">Quiz</button>
+                <button type="button" class="support-tab-btn" data-tab="tab-analytics">Analytics</button>
+                <button type="button" class="support-tab-btn" data-tab="tab-tools">Tools</button>
+            </div>
+
+            <div class="support-panel active" id="tab-live">
+            <div class="support-block">
+                <span class="support-label">Face Analysis</span>
+                <div class="camera-stage">
+                    <video id="sessionVideo" autoplay muted playsinline></video>
+                    <span class="camera-badge" id="cameraStatus">
+                        {% if realtime_supported %}
+                            Camera ready
+                        {% else %}
+                            Fallback analysis ready
+                        {% endif %}
+                    </span>
+                    <span class="camera-suggestion" id="cameraSuggestion">Emotion suggestion will appear here.</span>
+                </div>
+                <canvas id="captureCanvas" class="hidden"></canvas>
+                <div class="card-footer mt-20">
+                    <button type="button" class="btn" id="startSupportBtn">Start Camera</button>
+                    <button type="button" class="btn btn-secondary" id="analyzeNowBtn">Analyze</button>
+                    <a class="btn btn-secondary" href="{{ url_for('download_course_notes', course_id=course.id) }}" target="_blank" rel="noopener">Notes</a>
+                </div>
+                <div class="card-footer mt-20">
+                    <select id="actualEmotionSelect" class="input" style="max-width: 220px;">
+                        <option value="">Correct Detected Emotion</option>
+                        <option value="happy">Happy</option>
+                        <option value="focused">Focused</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="confused">Confused</option>
+                        <option value="stressed">Stressed</option>
+                        <option value="bored">Bored</option>
+                        <option value="sad">Sad</option>
+                        <option value="fear">Fear</option>
+                        <option value="angry">Angry</option>
+                        <option value="disgust">Disgust</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary btn-small" id="submitEmotionFeedbackBtn">Submit Feedback</button>
+                </div>
+            </div>
+
+            <div class="support-block">
+                <span class="support-label">Simple Explanation</span>
+                <div class="explanation-toolbar">
+                    <select id="explanationLanguage" class="language-select" aria-label="Explanation language">
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
+                        <option value="mr">Marathi</option>
+                    </select>
+                    <span class="line-counter" id="explanationCounter">Line 1</span>
+                </div>
+                <div class="support-text" id="simpleExplanation">
+                    Concept explanation will appear here.
+                </div>
+            </div>
+
+            <div class="support-block">
+                <span class="support-label">Live Lecture Summary</span>
+                <div class="support-text" id="liveSummary">
+                    Your live lecture summary will appear here after analysis.
+                </div>
+            </div>
+            </div>
+
+            <div class="support-panel" id="tab-quiz">
+            <div class="support-block">
+                <span class="support-label">Live MCQ Quiz</span>
+                <div class="support-text" id="quizQuestion">
+                    Your quick self-check question will appear here after analysis.
+                </div>
+                <div class="mcq-options" id="mcqOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback">
+                    Choose one option to check your understanding.
+                </div>
+                <div class="metric-row mt-20">
+                    <div class="metric-mini"><span class="k">Answered</span><span class="v" id="quizAnsweredCount">0</span></div>
+                    <div class="metric-mini"><span class="k">Correct</span><span class="v" id="quizCorrectCount">0</span></div>
+                    <div class="metric-mini"><span class="k">Score</span><span class="v" id="quizOverallScore">0%</span></div>
+                </div>
+            </div>
+            </div>
+
+            <div class="support-panel" id="tab-analytics">
+            <div class="support-block">
+                <span class="support-label">Live Analytics</span>
+                <div class="metric-row">
+                    <div class="metric-mini">
+                        <span class="k">Events</span>
+                        <span class="v" id="metricTotalEvents">{{ live_metrics.overview.total_events if live_metrics and live_metrics.overview else 0 }}</span>
+                    </div>
+                    <div class="metric-mini">
+                        <span class="k">Confidence</span>
+                        <span class="v" id="metricAvgConfidence">{{ live_metrics.overview.avg_confidence if live_metrics and live_metrics.overview else 0 }}%</span>
+                    </div>
+                    <div class="metric-mini">
+                        <span class="k">Valid Signal</span>
+                        <span class="v" id="metricValidRate">{{ live_metrics.overview.valid_rate if live_metrics and live_metrics.overview else 0 }}%</span>
+                    </div>
+                </div>
+                <div class="metric-row mt-20">
+                    <div class="metric-mini">
+                        <span class="k">Exam Attempts</span>
+                        <span class="v" id="metricExamAttempts">{{ live_metrics.exam_stats.attempts if live_metrics and live_metrics.exam_stats else 0 }}</span>
+                    </div>
+                    <div class="metric-mini">
+                        <span class="k">Exam Avg</span>
+                        <span class="v" id="metricExamAvg">{{ live_metrics.exam_stats.avg_score if live_metrics and live_metrics.exam_stats else 0 }}%</span>
+                    </div>
+                    <div class="metric-mini">
+                        <span class="k">Recovery</span>
+                        <span class="v" id="metricRecoveryRate">{{ live_metrics.strategy_pipeline.recovery_rate if live_metrics and live_metrics.strategy_pipeline else 0 }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="support-block">
+                <span class="support-label">Course Readiness</span>
+                <div class="support-text">
+                    Lectures: <strong>{{ content_readiness.lecture_count if content_readiness else 0 }}</strong> |
+                    AI Notes: <strong>{{ 'Ready' if content_readiness and content_readiness.ai_asset_ready else 'Pending' }}</strong> |
+                    Quiz Items: <strong>{{ content_readiness.quiz_items if content_readiness else 0 }}</strong> |
+                    Notes PDF: <strong>{{ 'Ready' if content_readiness and content_readiness.notes_ready else 'Pending' }}</strong>
+                </div>
+            </div>
+            </div>
+
+            <div class="support-panel" id="tab-tools">
+            <div class="support-block">
+                <span class="support-label">Latest Adaptive Feed</span>
+                <div id="latestFeedContainer">
+                    {% if live_metrics and live_metrics.latest_feed %}
+                        {% for item in live_metrics.latest_feed %}
+                            <div class="feed-item">
+                                <strong>{{ item.emotion|title }}</strong> | {{ item.strategy_title }}<br>
+                                <span class="muted">{{ item.created_at }}</span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="feed-item">No live feed yet. Start camera and run analysis.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="support-block">
+                <span class="support-label">Summarize Topic</span>
+                <div class="card-footer">
+                    <input id="topicInput" type="text" class="input" placeholder="Enter topic from current lecture..." style="flex: 1;">
+                    <button type="button" class="btn btn-secondary" id="summarizeTopicBtn">Summarize Topic</button>
+                </div>
+                <div class="support-text mt-20" id="topicSummaryText">
+                    Topic summary will appear here.
+                </div>
+                <div class="card-footer mt-20">
+                    <a class="btn btn-small hidden" id="topicPdfLink" href="#" target="_blank" rel="noopener">Open Topic Notes</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById('sessionVideo');
+    const canvas = document.getElementById('captureCanvas');
+    const startSupportBtn = document.getElementById('startSupportBtn');
+    const analyzeNowBtn = document.getElementById('analyzeNowBtn');
+    const emotionStatus = document.getElementById('emotionStatus');
+    const cameraStatus = document.getElementById('cameraStatus');
+    const cameraSuggestion = document.getElementById('cameraSuggestion');
+    const qualityStatus = document.getElementById('qualityStatus');
+    const simpleExplanation = document.getElementById('simpleExplanation');
+    const explanationLanguage = document.getElementById('explanationLanguage');
+    const explanationCounter = document.getElementById('explanationCounter');
+    const liveSummary = document.getElementById('liveSummary');
+    const quizQuestion = document.getElementById('quizQuestion');
+    const mcqOptions = document.getElementById('mcqOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    const actualEmotionSelect = document.getElementById('actualEmotionSelect');
+    const submitEmotionFeedbackBtn = document.getElementById('submitEmotionFeedbackBtn');
+    const metricTotalEvents = document.getElementById('metricTotalEvents');
+    const metricAvgConfidence = document.getElementById('metricAvgConfidence');
+    const metricValidRate = document.getElementById('metricValidRate');
+    const metricExamAttempts = document.getElementById('metricExamAttempts');
+    const metricExamAvg = document.getElementById('metricExamAvg');
+    const metricRecoveryRate = document.getElementById('metricRecoveryRate');
+    const latestFeedContainer = document.getElementById('latestFeedContainer');
+    const topicInput = document.getElementById('topicInput');
+    const summarizeTopicBtn = document.getElementById('summarizeTopicBtn');
+    const topicSummaryText = document.getElementById('topicSummaryText');
+    const topicPdfLink = document.getElementById('topicPdfLink');
+    const quizAnsweredCount = document.getElementById('quizAnsweredCount');
+    const quizCorrectCount = document.getElementById('quizCorrectCount');
+    const quizOverallScore = document.getElementById('quizOverallScore');
+    const tabButtons = Array.from(document.querySelectorAll('.support-tab-btn'));
+    const tabPanels = Array.from(document.querySelectorAll('.support-panel'));
+    let mediaStream = null;
+    let intervalId = null;
+    let lastPredictedEmotion = '';
+    let lastConfidence = 0;
+    let lastEasyStrategy = '';
+    let isAnalyzing = false;
+    let currentQuizKey = '';
+    let currentQuizAnswered = true;
+    let totalAnswered = 0;
+    let totalCorrect = 0;
+    let quizRotationId = null;
+    let quizCursor = 0;
+    let explanationRotationId = null;
+    let explanationLineIndex = 0;
+    const lectureQuizItems = {{ live_quiz_items|default([])|tojson }};
+    const quizContext = {
+        courseTitle: {{ course.title|tojson }},
+        lectureTitle: {{ (selected_lecture.title if selected_lecture else course.title)|tojson }},
+        subject: {{ course.subject|tojson }},
+        category: {{ course.category|tojson }}
+    };
+
+    function shuffleItems(items) {
+        const shuffled = [...items];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function uniqueValues(values) {
+        const seen = new Set();
+        return values
+            .map((value) => String(value || '').trim())
+            .filter((value) => {
+                const key = value.toLowerCase();
+                if (!value || seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+    }
+
+    function topicDistractors(topic, subject) {
+        return [
+            `Memorize ${topic} without understanding examples`,
+            `Skip ${topic} and move directly to an unrelated chapter`,
+            `Use ${subject || 'the subject'} terms without checking their meaning`,
+            `Ignore practice questions for ${topic}`,
+            `Focus only on definitions and avoid real examples`,
+            `Continue the lecture without a quick self-check`
+        ];
+    }
+
+    function generateOptions(correctAnswer, providedOptions = []) {
+        const topic = quizContext.lectureTitle || quizContext.courseTitle || 'this lecture topic';
+        const options = uniqueValues([
+            correctAnswer,
+            ...providedOptions,
+            ...topicDistractors(topic, quizContext.subject),
+            'Review the core idea step by step with one example',
+            'Connect the topic to the previous lecture before solving'
+        ]);
+        while (options.length < 4) {
+            options.push(`Revise ${topic} with one small example`);
+        }
+        return shuffleItems(options.slice(0, 4));
+    }
+
+    function normalizeQuizItem(item) {
+        const question = String(item.question || '').trim();
+        const answer = String(item.answer || item.correct_answer || '').trim();
+        const options = Array.isArray(item.options) ? item.options : [];
+        if (!question || !answer) {
+            return null;
+        }
+        return { question, answer, options };
+    }
+
+    function buildTopicQuizBank() {
+        const topic = quizContext.lectureTitle || quizContext.courseTitle || 'the current lecture topic';
+        const subject = quizContext.subject || 'the subject';
+        const generated = [
+            {
+                question: `What should you understand first in "${topic}"?`,
+                answer: `The main idea of ${topic} in simple steps`,
+                options: [
+                    `The main idea of ${topic} in simple steps`,
+                    `Only the final answer from ${topic}`,
+                    `A random topic outside ${subject}`,
+                    `The lecture speed instead of the concept`
+                ]
+            },
+            {
+                question: `Which action is best after watching a new part of "${topic}"?`,
+                answer: `Pause and solve one small self-check question`,
+                options: [
+                    'Pause and solve one small self-check question',
+                    'Skip practice until the end of the course',
+                    'Memorize every sentence without examples',
+                    'Change to a new lecture immediately'
+                ]
+            },
+            {
+                question: `Why are examples important while learning "${topic}"?`,
+                answer: `They connect the concept to practical understanding`,
+                options: [
+                    'They connect the concept to practical understanding',
+                    'They replace the need to understand basics',
+                    'They make revision unnecessary',
+                    'They are useful only after exams'
+                ]
+            },
+            {
+                question: `For "${topic}", what is the safest way to revise?`,
+                answer: `Summarize the concept, then attempt a short quiz`,
+                options: [
+                    'Summarize the concept, then attempt a short quiz',
+                    'Read unrelated notes quickly',
+                    'Avoid checking mistakes',
+                    'Watch passively without recall'
+                ]
+            },
+            {
+                question: `What does this lecture topic mainly belong to?`,
+                answer: subject,
+                options: [
+                    subject,
+                    'Unrelated entertainment',
+                    'Only login form design',
+                    'Only file storage'
+                ]
+            }
+        ];
+        const savedItems = (Array.isArray(lectureQuizItems) ? lectureQuizItems : [])
+            .map(normalizeQuizItem)
+            .filter(Boolean);
+        return shuffleItems([...savedItems, ...generated]);
+    }
+
+    const topicQuizBank = buildTopicQuizBank();
+
+    function buildConceptExplanationLines() {
+        const topic = quizContext.lectureTitle || quizContext.courseTitle || 'this lecture';
+        const subject = quizContext.subject || 'this subject';
+        const contextText = `${quizContext.courseTitle} ${quizContext.lectureTitle} ${subject}`;
+        if (/data\s*science/i.test(contextText)) {
+            return {
+                en: [
+                    'Data Science means using data to understand a problem and make better decisions.',
+                    'The lifecycle starts by asking a question, then collecting useful data for that question.',
+                    'After collection, the data is cleaned so missing, wrong, or repeated values do not confuse the result.',
+                    'Analysis means finding patterns, comparisons, trends, and relationships inside the cleaned data.',
+                    'Visualization turns numbers into charts, so the pattern becomes easier to see and explain.',
+                    'Interpretation is the final step where we explain what the pattern means and what action should be taken.'
+                ],
+                hi: [
+                    '\u0921\u0947\u091f\u093e \u0938\u093e\u0907\u0902\u0938 \u0915\u093e \u092e\u0924\u0932\u092c \u0939\u0948 data \u0915\u093e use \u0915\u0930\u0915\u0947 problem \u0915\u094b \u0938\u092e\u091d\u0928\u093e \u0914\u0930 better decision \u0932\u0947\u0928\u093e\u0964',
+                    '\u0907\u0938\u0915\u093e lifecycle question \u092a\u0942\u091b\u0928\u0947 \u0938\u0947 \u0936\u0941\u0930\u0942 \u0939\u094b\u0924\u093e \u0939\u0948, \u092b\u093f\u0930 \u0909\u0938 question \u0915\u0947 \u0932\u093f\u090f useful data collect \u0915\u093f\u092f\u093e \u091c\u093e\u0924\u093e \u0939\u0948\u0964',
+                    'Collection \u0915\u0947 \u092c\u093e\u0926 data clean \u0915\u093f\u092f\u093e \u091c\u093e\u0924\u093e \u0939\u0948 \u0924\u093e\u0915\u093f missing, wrong, \u092f\u093e repeated values result \u0915\u094b confuse \u0928 \u0915\u0930\u0947\u0902\u0964',
+                    'Analysis \u0915\u093e \u092e\u0924\u0932\u092c \u0939\u0948 cleaned data \u092e\u0947\u0902 patterns, comparisons, trends \u0914\u0930 relationships \u0922\u0942\u0902\u0922\u0928\u093e\u0964',
+                    'Visualization numbers \u0915\u094b charts \u092e\u0947\u0902 \u092c\u0926\u0932\u0924\u093e \u0939\u0948, \u091c\u093f\u0938\u0938\u0947 pattern \u0926\u0947\u0916\u0928\u093e \u0914\u0930 explain \u0915\u0930\u0928\u093e \u0906\u0938\u093e\u0928 \u0939\u094b\u0924\u093e \u0939\u0948\u0964',
+                    'Interpretation final step \u0939\u0948, \u091c\u0939\u093e\u0902 \u0939\u092e explain \u0915\u0930\u0924\u0947 \u0939\u0948\u0902 \u0915\u093f pattern \u0915\u093e meaning \u0915\u094d\u092f\u093e \u0939\u0948 \u0914\u0930 next action \u0915\u094d\u092f\u093e \u0939\u094b\u0928\u093e \u091a\u093e\u0939\u093f\u090f\u0964'
+                ],
+                mr: [
+                    '\u0921\u0947\u091f\u093e \u0938\u093e\u092f\u0928\u094d\u0938 \u092e\u094d\u0939\u0923\u091c\u0947 data \u0935\u093e\u092a\u0930\u0942\u0928 problem \u0938\u092e\u091c\u0942\u0928 \u0918\u0947\u0923\u0947 \u0906\u0923\u093f better decision \u0918\u0947\u0923\u0947\u0964',
+                    '\u092f\u093e\u091a\u093e lifecycle question \u0935\u093f\u091a\u093e\u0930\u0923\u094d\u092f\u093e\u092a\u093e\u0938\u0942\u0928 \u0938\u0941\u0930\u0942 \u0939\u094b\u0924\u094b, \u0928\u0902\u0924\u0930 \u0924\u094d\u092f\u093e question \u0938\u093e\u0920\u0940 useful data collect \u0915\u0947\u0932\u093e \u091c\u093e\u0924\u094b\u0964',
+                    'Collection \u0928\u0902\u0924\u0930 data clean \u0915\u0947\u0932\u093e \u091c\u093e\u0924\u094b, \u091c\u0947\u0923\u0947\u0915\u0930\u0942\u0928 missing, wrong, \u0915\u093f\u0902\u0935\u093e repeated values result \u0917\u094b\u0902\u0927\u0933\u0935\u0924 \u0928\u093e\u0939\u0940\u0924\u0964',
+                    'Analysis \u092e\u094d\u0939\u0923\u091c\u0947 cleaned data \u092e\u0927\u094d\u092f\u0947 patterns, comparisons, trends \u0906\u0923\u093f relationships \u0936\u094b\u0927\u0923\u0947\u0964',
+                    'Visualization numbers \u0932\u093e charts \u092e\u0927\u094d\u092f\u0947 \u092c\u0926\u0932\u0924\u0947, \u0924\u094d\u092f\u093e\u092e\u0941\u0933\u0947 pattern \u092a\u093e\u0939\u0923\u0947 \u0906\u0923\u093f explain \u0915\u0930\u0923\u0947 \u0938\u094b\u092a\u0947 \u0939\u094b\u0924\u0947\u0964',
+                    'Interpretation \u0939\u093e final step \u0906\u0939\u0947, \u091c\u093f\u0925\u0947 \u0906\u092a\u0923 pattern \u091a\u093e meaning \u0915\u093e\u092f \u0906\u0939\u0947 \u0906\u0923\u093f next action \u0915\u093e\u092f \u0905\u0938\u093e\u0935\u0940 \u0924\u0947 explain \u0915\u0930\u0924\u094b\u0964'
+                ]
+            };
+        }
+        if (/network|ip|routing|switching/i.test(contextText)) {
+            return {
+                en: [
+                    'Networking means connecting devices so they can share data with each other.',
+                    'Every device on a network needs an address, just like every house needs an address for delivery.',
+                    'An IP address identifies the device, and the subnet tells which part of the address belongs to the local network.',
+                    'A switch connects devices inside the same local network and forwards data to the correct device.',
+                    'A router connects different networks and decides the best path for data to travel.',
+                    'Protocols are rules for communication, such as TCP for reliable delivery and IP for addressing.',
+                    'DNS converts website names into IP addresses so the browser can find the correct server.',
+                    'Troubleshooting starts by checking cable or Wi-Fi, then IP address, gateway, DNS, and finally the destination server.'
+                ],
+                hi: [
+                    '\u0928\u0947\u091f\u0935\u0930\u094d\u0915\u093f\u0902\u0917 \u0915\u093e \u092e\u0924\u0932\u092c \u0939\u0948 devices \u0915\u094b connect \u0915\u0930\u0928\u093e \u0924\u093e\u0915\u093f \u0935\u0947 data share \u0915\u0930 \u0938\u0915\u0947\u0902\u0964',
+                    '\u0939\u0930 device \u0915\u094b network \u092e\u0947\u0902 address \u091a\u093e\u0939\u093f\u090f, \u091c\u0948\u0938\u0947 delivery \u0915\u0947 \u0932\u093f\u090f house address \u091a\u093e\u0939\u093f\u090f\u0964',
+                    'IP address device \u0915\u094b identify \u0915\u0930\u0924\u093e \u0939\u0948, \u0914\u0930 subnet \u092c\u0924\u093e\u0924\u093e \u0939\u0948 \u0915\u093f local network \u0915\u094c\u0928 \u0938\u093e \u0939\u0948\u0964',
+                    'Switch same local network \u0915\u0947 devices \u0915\u094b connect \u0915\u0930\u0924\u093e \u0939\u0948 \u0914\u0930 data \u0938\u0939\u0940 device \u0924\u0915 \u092d\u0947\u091c\u0924\u093e \u0939\u0948\u0964',
+                    'Router different networks \u0915\u094b connect \u0915\u0930\u0924\u093e \u0939\u0948 \u0914\u0930 data \u0915\u0947 \u0932\u093f\u090f best path choose \u0915\u0930\u0924\u093e \u0939\u0948\u0964',
+                    'DNS website name \u0915\u094b IP address \u092e\u0947\u0902 convert \u0915\u0930\u0924\u093e \u0939\u0948 \u0924\u093e\u0915\u093f browser server \u0922\u0942\u0902\u0922 \u0938\u0915\u0947\u0964'
+                ],
+                mr: [
+                    '\u0928\u0947\u091f\u0935\u0930\u094d\u0915\u093f\u0902\u0917 \u092e\u094d\u0939\u0923\u091c\u0947 devices connect \u0915\u0930\u0923\u0947, \u091c\u0947\u0923\u0947\u0915\u0930\u0942\u0928 \u0924\u0947 data share \u0915\u0930\u0942 \u0936\u0915\u0924\u093e\u0924\u0964',
+                    '\u092a\u094d\u0930\u0924\u094d\u092f\u0947\u0915 device \u0932\u093e network \u092e\u0927\u094d\u092f\u0947 address \u0932\u093e\u0917\u0924\u094b, \u091c\u0938\u0947 delivery \u0938\u093e\u0920\u0940 house address \u0932\u093e\u0917\u0924\u094b\u0964',
+                    'IP address device identify \u0915\u0930\u0924\u094b, \u0906\u0923\u093f subnet local network \u0915\u094b\u0923\u0924\u093e \u0906\u0939\u0947 \u0924\u0947 \u0926\u093e\u0916\u0935\u0924\u094b\u0964',
+                    'Switch same local network \u092e\u0927\u0940\u0932 devices connect \u0915\u0930\u0924\u094b \u0906\u0923\u093f data \u092f\u094b\u0917\u094d\u092f device \u0915\u0921\u0947 \u092a\u093e\u0920\u0935\u0924\u094b\u0964',
+                    'Router different networks connect \u0915\u0930\u0924\u094b \u0906\u0923\u093f data \u0938\u093e\u0920\u0940 best path choose \u0915\u0930\u0924\u094b\u0964',
+                    'DNS website name \u0932\u093e IP address \u092e\u0927\u094d\u092f\u0947 convert \u0915\u0930\u0924\u0947, \u0924\u094d\u092f\u093e\u092e\u0941\u0933\u0947 browser server \u0936\u094b\u0927\u0942 \u0936\u0915\u0924\u094b\u0964'
+                ]
+            };
+        }
+        return {
+            en: [
+                `${topic} is best understood as one small concept at a time.`,
+                `First identify what problem this topic solves in ${subject}.`,
+                `Then connect the definition with a simple real example.`,
+                `After that, check the workflow: input, process, output, and result.`,
+                `If a word feels difficult, pause and rewrite it in your own simple sentence.`,
+                `Finally, answer one quiz question to confirm that the concept is clear.`
+            ],
+            hi: [
+                `${topic} को एक-एक छोटे concept की तरह समझो।`,
+                `पहले देखो कि ${subject} में यह topic कौन सी problem solve करता है।`,
+                `फिर definition को एक simple real example से connect करो।`,
+                `उसके बाद flow देखो: input, process, output और result।`,
+                `अगर कोई word difficult लगे, तो उसे अपनी simple line में लिखो।`,
+                `अंत में एक quiz question solve करके concept clear है या नहीं check करो।`
+            ],
+            mr: [
+                `${topic} हा topic एक-एक छोटा concept म्हणून समजून घ्या।`,
+                `पहिले पाहा की ${subject} मध्ये हा topic कोणती problem solve करतो।`,
+                `नंतर definition ला एका simple real example सोबत connect करा।`,
+                `त्यानंतर flow पाहा: input, process, output आणि result।`,
+                `जर एखादा word कठीण वाटला, तर तो स्वतःच्या simple वाक्यात लिहा।`,
+                `शेवटी एक quiz question सोडवून concept clear आहे का ते check करा।`
+            ]
+        };
+    }
+
+    const conceptExplanationLines = buildConceptExplanationLines();
+
+    function renderExplanationLine() {
+        const language = explanationLanguage.value || 'en';
+        const lines = conceptExplanationLines[language] || conceptExplanationLines.en;
+        if (!lines.length) {
+            return;
+        }
+        const visibleLines = [];
+        const lineCount = Math.min(4, lines.length);
+        for (let offset = 0; offset < lineCount; offset++) {
+            visibleLines.push(lines[(explanationLineIndex + offset) % lines.length]);
+        }
+        const startLine = (explanationLineIndex % lines.length) + 1;
+        const endLine = ((explanationLineIndex + lineCount - 1) % lines.length) + 1;
+        simpleExplanation.innerHTML = visibleLines
+            .map((line) => `<p>${escapeHtml(line)}</p>`)
+            .join('');
+        explanationCounter.textContent = `Lines ${startLine}-${endLine}/${lines.length}`;
+        explanationLineIndex += 1;
+    }
+
+    function startExplanationRotation() {
+        if (explanationRotationId) {
+            clearInterval(explanationRotationId);
+        }
+        explanationLineIndex = 0;
+        renderExplanationLine();
+        explanationRotationId = setInterval(renderExplanationLine, 5000);
+    }
+
+    function addAnalysisExplanation(text) {
+        const cleanText = String(text || '').trim();
+        if (!cleanText) {
+            return;
+        }
+        if (!conceptExplanationLines.en.some((line) => line.toLowerCase() === cleanText.toLowerCase())) {
+            conceptExplanationLines.en.unshift(cleanText);
+        }
+    }
+
+    function updateQuizScoreboard() {
+        quizAnsweredCount.textContent = String(totalAnswered);
+        quizCorrectCount.textContent = String(totalCorrect);
+        const pct = totalAnswered > 0 ? ((totalCorrect / totalAnswered) * 100).toFixed(1) : '0.0';
+        quizOverallScore.textContent = `${pct}%`;
+    }
+
+    function resetQuizFeedback() {
+        quizFeedback.textContent = 'Choose one option to check your understanding. The next question appears in 30 seconds.';
+        quizFeedback.style.borderColor = '#e2e8f0';
+        quizFeedback.style.background = '#f8fafc';
+    }
+
+    function renderMcq(question, answer, providedOptions = []) {
+        quizQuestion.textContent = question || 'MCQ will appear for this lecture topic.';
+        const options = generateOptions(answer || '', providedOptions);
+        mcqOptions.innerHTML = '';
+        if (!options.length) return;
+        options.forEach((opt, idx) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'mcq-btn';
+            button.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+            button.addEventListener('click', () => {
+                if (currentQuizAnswered) {
+                    return;
+                }
+                currentQuizAnswered = true;
+                totalAnswered += 1;
+                const isCorrect = (opt || '').trim().toLowerCase() === (answer || '').trim().toLowerCase();
+                if (isCorrect) {
+                    totalCorrect += 1;
+                    quizFeedback.textContent = 'Correct. Great job. Continue with the next lecture step.';
+                    quizFeedback.style.borderColor = '#10b981';
+                    quizFeedback.style.background = '#ecfdf5';
+                } else {
+                    quizFeedback.textContent = `Wrong answer. Easy strategy: ${lastEasyStrategy || 'Pause and revise one concept with a simple example.'} Correct answer: ${answer}`;
+                    quizFeedback.style.borderColor = '#f59e0b';
+                    quizFeedback.style.background = '#fffbeb';
+                }
+                updateQuizScoreboard();
+            });
+            mcqOptions.appendChild(button);
+        });
+    }
+
+    function showNextTopicQuiz() {
+        if (!topicQuizBank.length) {
+            renderMcq(
+                `What is the main idea from ${quizContext.lectureTitle || quizContext.courseTitle}?`,
+                'Understand the current lecture concept step by step',
+                []
+            );
+            return;
+        }
+        const item = topicQuizBank[quizCursor % topicQuizBank.length];
+        quizCursor += 1;
+        currentQuizKey = `${item.question}::${item.answer}::${Date.now()}`;
+        currentQuizAnswered = false;
+        renderMcq(item.question, item.answer, item.options || []);
+        resetQuizFeedback();
+    }
+
+    function startQuizRotation() {
+        showNextTopicQuiz();
+        if (quizRotationId) {
+            clearInterval(quizRotationId);
+        }
+        quizRotationId = setInterval(showNextTopicQuiz, 30000);
+    }
+
+    async function startCameraSupport() {
+        if (mediaStream) {
+            return;
+        }
+        try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = mediaStream;
+            cameraStatus.textContent = 'Camera active';
+            startMonitoringLoop();
+        } catch (error) {
+            cameraStatus.textContent = 'Camera permission required';
+        }
+    }
+
+    function captureFrameData() {
+        if (!video.videoWidth || !video.videoHeight) {
+            return null;
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL('image/jpeg', 0.7);
+    }
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function renderSimpleMarkdown(markdownText) {
+        const lines = String(markdownText || '').split('\n');
+        const htmlLines = [];
+        let inList = false;
+
+        const closeList = () => {
+            if (inList) {
+                htmlLines.push('</ul>');
+                inList = false;
+            }
+        };
+
+        for (const raw of lines) {
+            const line = raw.trim();
+            if (!line) {
+                closeList();
+                continue;
+            }
+            if (line.startsWith('## ')) {
+                closeList();
+                htmlLines.push(`<h4>${escapeHtml(line.slice(3))}</h4>`);
+                continue;
+            }
+            if (line.startsWith('# ')) {
+                closeList();
+                htmlLines.push(`<h3>${escapeHtml(line.slice(2))}</h3>`);
+                continue;
+            }
+            if (line.startsWith('- ')) {
+                if (!inList) {
+                    htmlLines.push('<ul>');
+                    inList = true;
+                }
+                htmlLines.push(`<li>${escapeHtml(line.slice(2))}</li>`);
+                continue;
+            }
+            if (/^\d+\.\s+/.test(line)) {
+                if (!inList) {
+                    htmlLines.push('<ul>');
+                    inList = true;
+                }
+                htmlLines.push(`<li>${escapeHtml(line.replace(/^\d+\.\s+/, ''))}</li>`);
+                continue;
+            }
+            closeList();
+            htmlLines.push(`<p>${escapeHtml(line)}</p>`);
+        }
+        closeList();
+        return htmlLines.join('');
+    }
+
+    async function analyzeExpression() {
+        if (isAnalyzing) {
+            return;
+        }
+        const frame = captureFrameData();
+        if (!frame) {
+            cameraStatus.textContent = 'Waiting for live camera frame';
+            emotionStatus.textContent = 'Waiting for camera';
+            return;
+        }
+        isAnalyzing = true;
+
+        const body = new URLSearchParams({
+            course_id: '{{ course.id }}',
+            frame: frame
+        });
+        try {
+            const response = await fetch('{{ url_for("session_emotion") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body
+            });
+
+            if (!response.ok) {
+                emotionStatus.textContent = 'Analysis failed';
+                return;
+            }
+
+            const result = await response.json();
+            emotionStatus.textContent = `Emotion: ${result.emotion}`;
+            const supportMode = (result.support_mode || '').toLowerCase();
+            if (supportMode.startsWith('quality-low_light')) {
+                qualityStatus.textContent = 'Low light detected';
+                qualityStatus.classList.remove('hidden');
+            } else if (supportMode.startsWith('quality-blurred')) {
+                qualityStatus.textContent = 'Blurred frame detected';
+                qualityStatus.classList.remove('hidden');
+            } else {
+                qualityStatus.classList.add('hidden');
+            }
+            lastPredictedEmotion = result.emotion || '';
+            lastConfidence = result.confidence || 0;
+            lastEasyStrategy = result.easy_strategy || result.simple_explanation || '';
+            addAnalysisExplanation(result.simple_explanation);
+            liveSummary.textContent = result.live_summary || result.strategy_text || 'Summary will update after analysis.';
+            cameraSuggestion.textContent = `${result.strategy_title || 'Suggestion'}: ${result.easy_strategy || result.simple_explanation || 'Keep learning steadily.'}`;
+            const nextQuizKey = `${(result.quiz_question || '').trim()}::${(result.quiz_answer || '').trim()}`;
+            if (result.quiz_question && result.quiz_answer && !topicQuizBank.some((item) => `${item.question}::${item.answer}` === nextQuizKey)) {
+                topicQuizBank.push({
+                    question: result.quiz_question,
+                    answer: result.quiz_answer,
+                    options: []
+                });
+            }
+            await refreshLiveMetrics();
+        } finally {
+            isAnalyzing = false;
+        }
+    }
+
+    async function refreshLiveMetrics() {
+        const response = await fetch('{{ url_for("live_metrics", course_id=course.id) }}');
+        if (!response.ok) return;
+        const payload = await response.json();
+        if (!payload.ok || !payload.metrics) return;
+        const metrics = payload.metrics;
+        const overview = metrics.overview || {};
+        const examStats = metrics.exam_stats || {};
+        const strategyPipeline = metrics.strategy_pipeline || {};
+        metricTotalEvents.textContent = overview.total_events || 0;
+        metricAvgConfidence.textContent = `${overview.avg_confidence || 0}%`;
+        metricValidRate.textContent = `${overview.valid_rate || 0}%`;
+        metricExamAttempts.textContent = examStats.attempts || 0;
+        metricExamAvg.textContent = `${examStats.avg_score || 0}%`;
+        metricRecoveryRate.textContent = `${strategyPipeline.recovery_rate || 0}%`;
+
+        const feed = metrics.latest_feed || [];
+        if (!feed.length) {
+            latestFeedContainer.innerHTML = '<div class="feed-item">No live feed yet. Start camera and run analysis.</div>';
+            return;
+        }
+        latestFeedContainer.innerHTML = feed.map(item => (
+            `<div class="feed-item"><strong>${escapeHtml(item.emotion || 'neutral')}</strong> | ${escapeHtml(item.strategy_title || 'Strategy')}<br><span class="muted">${escapeHtml(item.created_at || '')}</span></div>`
+        )).join('');
+    }
+
+    function startMonitoringLoop() {
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        intervalId = setInterval(analyzeExpression, 3500);
+    }
+
+    startSupportBtn.addEventListener('click', startCameraSupport);
+    explanationLanguage.addEventListener('change', startExplanationRotation);
+    tabButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            tabButtons.forEach((item) => item.classList.toggle('active', item === btn));
+            tabPanels.forEach((panel) => panel.classList.toggle('active', panel.id === tabId));
+        });
+    });
+    analyzeNowBtn.addEventListener('click', async () => {
+        if (!mediaStream) {
+            await startCameraSupport();
+        }
+        await analyzeExpression();
+    });
+    submitEmotionFeedbackBtn.addEventListener('click', async () => {
+        const actualEmotion = actualEmotionSelect.value;
+        if (!actualEmotion || !lastPredictedEmotion) {
+            return;
+        }
+        const body = new URLSearchParams({
+            course_id: '{{ course.id }}',
+            predicted_emotion: lastPredictedEmotion,
+            actual_emotion: actualEmotion,
+            confidence: String(lastConfidence || 0)
+        });
+        const response = await fetch('{{ url_for("emotion_feedback") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body
+        });
+        if (response.ok) {
+            actualEmotionSelect.value = '';
+            cameraStatus.textContent = 'Feedback saved';
+            await refreshLiveMetrics();
+        }
+    });
+
+    summarizeTopicBtn.addEventListener('click', async () => {
+        const topic = (topicInput.value || '').trim();
+        if (!topic) {
+            topicSummaryText.textContent = 'Please enter a specific topic from the lecture.';
+            return;
+        }
+        summarizeTopicBtn.disabled = true;
+        summarizeTopicBtn.textContent = 'Generating...';
+        try {
+            const body = new URLSearchParams({
+                course_id: '{{ course.id }}',
+                topic: topic,
+                lecture_id: '{{ selected_lecture.id if selected_lecture else 0 }}'
+            });
+            const response = await fetch('{{ url_for("topic_summary") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body
+            });
+            const result = await response.json();
+            if (!response.ok || !result.ok) {
+                topicSummaryText.textContent = result.message || 'Topic summary generation failed.';
+                return;
+            }
+            topicSummaryText.innerHTML = renderSimpleMarkdown(result.summary_markdown || 'Summary generated.');
+            if (result.notes_url) {
+                topicPdfLink.href = result.notes_url;
+                topicPdfLink.classList.remove('hidden');
+            }
+        } finally {
+            summarizeTopicBtn.disabled = false;
+            summarizeTopicBtn.textContent = 'Summarize Topic';
+        }
+    });
+
+    setInterval(refreshLiveMetrics, 18000);
+    updateQuizScoreboard();
+    startExplanationRotation();
+    startQuizRotation();
+</script>
+{% endblock %}

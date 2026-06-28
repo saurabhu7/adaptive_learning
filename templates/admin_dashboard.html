@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Admin Dashboard</h1>
+    <p>Monitor the full platform lifecycle across users, courses, exams, and real-time adaptive learning activity.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="grid-3">
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <div class="value">{{ counts.users }}</div>
+        </div>
+        <div class="stat-card success">
+            <h3>Students / Teachers</h3>
+            <div class="value">{{ counts.students }} / {{ counts.teachers }}</div>
+        </div>
+        <div class="stat-card warning">
+            <h3>Total Courses</h3>
+            <div class="value">{{ counts.courses }}</div>
+        </div>
+    </div>
+
+    <div class="feature-panel">
+        <div class="section-head">
+            <div>
+                <h2>Platform Overview</h2>
+                <p>This admin view confirms the project is fully integrated: authentication, role-based dashboards, course management, exams, database persistence, and live session support all run from the same application.</p>
+            </div>
+            <div class="pill-row">
+                <span class="data-chip">{{ counts.attempts }} exam records</span>
+                <span class="data-chip">{{ counts.insights }} realtime insights</span>
+                <span class="data-chip">{{ recovery_overview.recovery_rate if recovery_overview else 0 }}% recovery</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn" href="{{ url_for('addcourse') }}">Add Course</a>
+            <a class="btn" href="{{ url_for('view_students') }}">Students</a>
+            <a class="btn btn-secondary" href="{{ url_for('view_teachers') }}">Teachers</a>
+            <a class="btn btn-secondary" href="{{ url_for('show_courses') }}">Courses</a>
+            <a class="btn btn-secondary" href="{{ url_for('result_exam') }}">Exam Results</a>
+            <form action="{{ url_for('reset_domain_courses') }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-secondary" onclick="return confirm('Remove old courses and add fresh domain-wise catalog (IT, Non-IT, Data Science, Soft Skills)?');">Reset Domain Courses</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid-3">
+        <div class="stat-card">
+            <h3>Emotion Events</h3>
+            <div class="value">{{ model_quality.emotion_events if model_quality else 0 }}</div>
+        </div>
+        <div class="stat-card success">
+            <h3>Valid Signal Rate</h3>
+            <div class="value">{{ model_quality.valid_signal_rate if model_quality else 0 }}%</div>
+        </div>
+        <div class="stat-card warning">
+            <h3>Feedback Match</h3>
+            <div class="value">{{ model_quality.feedback_match_rate if model_quality else 0 }}%</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Model Governance</h2>
+                    <p>Reliability and alignment metrics for paper-based emotion detection in production.</p>
+                </div>
+            </div>
+            <p><strong>Average confidence:</strong> {{ model_quality.avg_confidence if model_quality else 0 }}%</p>
+            <p><strong>Feedback samples:</strong> {{ model_quality.feedback_samples if model_quality else 0 }}</p>
+            <p><strong>Feedback match rate:</strong> {{ model_quality.feedback_match_rate if model_quality else 0 }}%</p>
+            <p><strong>Valid signal rate:</strong> {{ model_quality.valid_signal_rate if model_quality else 0 }}%</p>
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Content Pipeline Health</h2>
+                    <p>Readiness status of lectures, AI notes, and quiz generation across all courses.</p>
+                </div>
+            </div>
+            <p><strong>Total courses:</strong> {{ platform_content_health.total_courses if platform_content_health else 0 }}</p>
+            <p><strong>Courses with lectures:</strong> {{ platform_content_health.courses_with_lectures if platform_content_health else 0 }}</p>
+            <p><strong>AI-ready courses:</strong> {{ platform_content_health.ai_ready_courses if platform_content_health else 0 }}</p>
+            <p><strong>Notes-ready courses:</strong> {{ platform_content_health.notes_ready_courses if platform_content_health else 0 }}</p>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Highest Risk Students</h2>
+                    <p>Students sorted by risk score from adaptive profile metrics.</p>
+                </div>
+            </div>
+            {% if highest_risk_students %}
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Risk Score</th>
+                                <th>Recovery Rate</th>
+                                <th>Engagement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in highest_risk_students %}
+                                <tr>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ item.risk_score|round(2) }}</td>
+                                    <td>{{ item.recovery_rate|round(2) }}%</td>
+                                    <td>{{ item.engagement_score|round(2) }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-state">Risk list will appear once student profiles are generated.</p>
+            {% endif %}
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Analysis Provider Mix</h2>
+                    <p>Distribution of providers used for emotion analysis in live sessions.</p>
+                </div>
+            </div>
+            {% if provider_mix %}
+                <div class="activity-feed">
+                    {% for item in provider_mix %}
+                        <div class="activity-item">
+                            <strong>{{ item.analysis_provider }}</strong>
+                            <p>{{ item.total }} session(s)</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">Provider usage appears after live sessions start.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Student Performance BI (Admin View)</h2>
+                <p>Select any student and view full dashboard-level learning analytics in one place.</p>
+            </div>
+        </div>
+        <form method="get" action="{{ url_for('admin_dashboard') }}">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="student_id">Select Student</label>
+                    <select id="student_id" name="student_id" required>
+                        {% for student in students %}
+                            <option value="{{ student.id }}" {% if selected_student and selected_student.id == student.id %}selected{% endif %}>
+                                {{ student.username }} ({{ student.email }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn">Open Student Dashboard View</button>
+                </div>
+            </div>
+        </form>
+        {% if selected_student %}
+            <div class="grid-3 mt-20">
+                <div class="stat-card">
+                    <h3>Avg Score</h3>
+                    <div class="value">{{ student_overview.stats.average_score }}%</div>
+                </div>
+                <div class="stat-card success">
+                    <h3>Performance Index</h3>
+                    <div class="value">{{ student_overview.bi_analytics.performance_index }}</div>
+                </div>
+                <div class="stat-card warning">
+                    <h3>Risk Band</h3>
+                    <div class="value">{{ student_overview.bi_analytics.risk_band }}</div>
+                </div>
+            </div>
+            <div class="table-scroll mt-20">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Exam Attempts</th>
+                            <th>Avg Score</th>
+                            <th>Support Sessions</th>
+                            <th>Latest Emotion</th>
+                            <th>Top Strategy</th>
+                            <th>Recovery Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in student_overview.per_course_analysis %}
+                            <tr>
+                                <td>{{ row.title }}</td>
+                                <td>{{ row.category|category_label }}</td>
+                                <td>{{ row.exam_attempts }}</td>
+                                <td>{{ row.avg_exam_score }}%</td>
+                                <td>{{ row.support_sessions }}</td>
+                                <td>{{ row.latest_emotion|title }}</td>
+                                <td>{{ row.top_strategy }}</td>
+                                <td>{{ row.recovery_rate }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Database Integration</h2>
+                    <p>The project now supports a dedicated MySQL setup for application users, courses, exams, moods, and live session insights.</p>
+                </div>
+            </div>
+            <p><strong>Active backend:</strong> {{ app_db_backend|upper }}</p>
+            <p><strong>MySQL configuration detected:</strong> {{ 'Yes' if mysql_ready else 'No' }}</p>
+            <p class="muted">Set `DB_BACKEND=mysql` with MySQL connection variables to move the platform data from SQLite to MySQL.</p>
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>FER-2013 Model Status</h2>
+                    <p>Training metadata is stored so the final project can show the trained emotion model used in the live learning workflow.</p>
+                </div>
+            </div>
+            {% if model_info %}
+                <p><strong>Model:</strong> {{ model_info.model_name }}</p>
+                <p><strong>Dataset:</strong> {{ model_info.dataset_name }}</p>
+                <p><strong>Train / Val / Test:</strong> {{ model_info.train_samples }} / {{ model_info.validation_samples }} / {{ model_info.test_samples }}</p>
+                <p><strong>Accuracy:</strong> train {{ (model_info.train_accuracy * 100)|round(2) }}% | val {{ (model_info.val_accuracy * 100)|round(2) }}% | test {{ (model_info.test_accuracy * 100)|round(2) }}%</p>
+            {% else %}
+                <p class="empty-state">No training run is stored yet. Use the FER-2013 training script described in the README to generate model artifacts and test metrics.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Adaptive Outcome Metrics</h2>
+                <p>Closed-loop intervention tracking from recommendation to emotional recovery.</p>
+            </div>
+        </div>
+        <p><strong>Total outcomes:</strong> {{ recovery_overview.total_outcomes if recovery_overview else 0 }}</p>
+        <p><strong>Improved outcomes:</strong> {{ recovery_overview.improved_outcomes if recovery_overview else 0 }}</p>
+        <p><strong>Recovery rate:</strong> {{ recovery_overview.recovery_rate if recovery_overview else 0 }}%</p>
+        {% if top_strategies %}
+            <div class="pill-row">
+                {% for item in top_strategies %}
+                    <span class="data-chip">{{ item.strategy_code }} ({{ item.used_count }})</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Category Overview</h2>
+                <p>Track the health of each academic category using course, exam, and support activity.</p>
+            </div>
+        </div>
+        {% if category_overview %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Courses</th>
+                            <th>Attempts</th>
+                            <th>Avg Score</th>
+                            <th>Support Events</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in category_overview %}
+                            <tr>
+                                <td>{{ category.category|category_label }}</td>
+                                <td>{{ category.course_count }}</td>
+                                <td>{{ category.attempts }}</td>
+                                <td>{{ category.average_score }}%</td>
+                                <td>{{ category.support_events }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No category activity recorded yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Recent Users</h2>
+                    <p>Newest users added into the platform database.</p>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role|title }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Recent Courses</h2>
+                    <p>Courses created by teachers and stored in the platform.</p>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Teacher</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                            <tr>
+                                <td>{{ course.title }}</td>
+                                <td>{{ course.teacher_name or 'N/A' }}</td>
+                                <td>{{ course.category|category_label }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Recent Exam Attempts</h2>
+                    <p>Performance feed coming from the integrated exam module.</p>
+                </div>
+            </div>
+            {% if attempts %}
+                <div class="activity-feed">
+                    {% for attempt in attempts %}
+                        <div class="activity-item">
+                            <strong>{{ attempt.username }}</strong>
+                            <div class="muted">{{ attempt.created_at }}</div>
+                            <p>{{ attempt.course_title or (attempt.category|category_label) }}</p>
+                            <p>Score {{ attempt.score }}/{{ attempt.total_questions }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No exam attempts recorded yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Realtime Support Feed</h2>
+                    <p>Latest support interventions triggered during lecture sessions.</p>
+                </div>
+            </div>
+            {% if support_feed %}
+                <div class="activity-feed">
+                    {% for insight in support_feed %}
+                        <div class="activity-item">
+                            <strong>{{ insight.username }} | {{ insight.course_title }}</strong>
+                            <div class="muted">{{ insight.created_at }}</div>
+                            <p><span class="status-dot {% if insight.emotion in ['confused', 'sad', 'fear', 'stressed'] %}danger{% elif insight.emotion in ['bored', 'disgust'] %}warning{% else %}success{% endif %}"></span>{{ insight.emotion|title }} detected</p>
+                            <p>{{ insight.strategy_title }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No realtime support insights recorded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

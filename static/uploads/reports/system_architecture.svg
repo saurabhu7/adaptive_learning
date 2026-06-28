@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" viewBox="0 0 1400 920">
+  <defs>
+    <style>
+      .bg{fill:#f6f8fb}.panel{fill:#fff;stroke:#d7dee9;stroke-width:2}.box{fill:#ffffff;stroke:#2563eb;stroke-width:2;rx:8}.box2{fill:#ecfeff;stroke:#0891b2;stroke-width:2;rx:8}.box3{fill:#fff7ed;stroke:#ea580c;stroke-width:2;rx:8}.box4{fill:#f0fdf4;stroke:#16a34a;stroke-width:2;rx:8}.box5{fill:#fef2f2;stroke:#dc2626;stroke-width:2;rx:8}.txt{font-family:Arial,Helvetica,sans-serif;font-size:18px;fill:#111827;font-weight:700}.small{font-family:Arial,Helvetica,sans-serif;font-size:14px;fill:#475569}.title{font-family:Arial,Helvetica,sans-serif;font-size:34px;fill:#111827;font-weight:800}.sub{font-family:Arial,Helvetica,sans-serif;font-size:16px;fill:#475569}.arrow{stroke:#334155;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+  </defs>
+  <rect class="bg" width="1400" height="920"/>
+  <rect class="panel" x="35" y="30" width="1330" height="850" rx="18"/>
+  <text class="title" x="70" y="80">System Architecture: Adaptive Learning Through Facial Expression Analysis</text>
+  <text class="sub" x="70" y="108">Research paper architecture for course learning, emotion recognition, AI notes, quiz generation, and dashboard analytics.</text>
+
+  <rect class="box" x="70" y="160" width="230" height="80"/><text class="txt" x="100" y="192">Student Login</text><text class="small" x="100" y="216">Role based access</text>
+  <rect class="box" x="370" y="160" width="240" height="80"/><text class="txt" x="400" y="192">Student Dashboard</text><text class="small" x="400" y="216">Courses, exams, analytics</text>
+  <rect class="box" x="680" y="160" width="230" height="80"/><text class="txt" x="710" y="192">Select Course</text><text class="small" x="710" y="216">Domain-wise course list</text>
+  <rect class="box" x="980" y="160" width="260" height="80"/><text class="txt" x="1010" y="192">Live Lecture Module</text><text class="small" x="1010" y="216">Video + camera + quiz</text>
+
+  <path class="arrow" d="M300 200 H370"/><path class="arrow" d="M610 200 H680"/><path class="arrow" d="M910 200 H980"/>
+
+  <rect class="box2" x="845" y="310" width="230" height="80"/><text class="txt" x="875" y="342">YouTube Player</text><text class="small" x="875" y="366">Lecture video</text>
+  <rect class="box2" x="1120" y="310" width="230" height="80"/><text class="txt" x="1150" y="342">Camera Capture</text><text class="small" x="1150" y="366">Live face frames</text>
+  <path class="arrow" d="M1070 240 V310"/><path class="arrow" d="M1130 240 V310"/>
+
+  <rect class="box5" x="1040" y="455" width="250" height="80"/><text class="txt" x="1070" y="487">OpenCV Face Detection</text><text class="small" x="1070" y="511">Preprocessing 48x48</text>
+  <rect class="box5" x="1040" y="590" width="250" height="80"/><text class="txt" x="1070" y="622">Emotion Model</text><text class="small" x="1070" y="646">FER2013 MLP classifier</text>
+  <rect class="box5" x="1040" y="725" width="250" height="80"/><text class="txt" x="1070" y="757">Emotion Output</text><text class="small" x="1070" y="781">Confidence + emotion</text>
+  <path class="arrow" d="M1235 390 V455"/><path class="arrow" d="M1165 535 V590"/><path class="arrow" d="M1165 670 V725"/>
+
+  <rect class="box3" x="550" y="455" width="300" height="80"/><text class="txt" x="580" y="487">Adaptive Strategy Engine</text><text class="small" x="580" y="511">Learning state analysis</text>
+  <rect class="box3" x="550" y="590" width="300" height="80"/><text class="txt" x="580" y="622">Personalized Support</text><text class="small" x="580" y="646">Easy strategy + MCQ quiz</text>
+  <path class="arrow" d="M1040 765 H850 V495"/><path class="arrow" d="M700 535 V590"/>
+
+  <rect class="box4" x="95" y="310" width="260" height="80"/><text class="txt" x="125" y="342">Transcript Extraction</text><text class="small" x="125" y="366">YouTube lecture text</text>
+  <rect class="box4" x="95" y="455" width="260" height="80"/><text class="txt" x="125" y="487">Gemini / Grok API</text><text class="small" x="125" y="511">AI content generation</text>
+  <rect class="box4" x="95" y="590" width="260" height="80"/><text class="txt" x="125" y="622">Notes + Exam</text><text class="small" x="125" y="646">10 page PDF + 20 MCQ</text>
+  <path class="arrow" d="M845 350 H355"/><path class="arrow" d="M225 390 V455"/><path class="arrow" d="M225 535 V590"/>
+
+  <rect class="box" x="550" y="725" width="300" height="80"/><text class="txt" x="580" y="757">MySQL Database</text><text class="small" x="580" y="781">Users, courses, emotions, exams</text>
+  <path class="arrow" d="M700 670 V725"/><path class="arrow" d="M355 630 H550 V765"/><path class="arrow" d="M1040 765 H850"/>
+
+  <rect class="box" x="70" y="760" width="230" height="80"/><text class="txt" x="100" y="792">Teacher Panel</text><text class="small" x="100" y="816">Add course, playlist, exam</text>
+  <rect class="box" x="370" y="760" width="230" height="80"/><text class="txt" x="400" y="792">Admin Panel</text><text class="small" x="400" y="816">BI analytics, reports</text>
+  <path class="arrow" d="M550 765 H300"/>
+  <path class="arrow" d="M600 785 H600"/>
+  <path class="arrow" d="M600 785 H600"/>
+  <path class="arrow" d="M600 785 H600"/>
+  <path class="arrow" d="M600 785 H600"/>
+  <path class="arrow" d="M550 765 H300 V800"/>
+  <path class="arrow" d="M610 785 H600"/>
+  <path class="arrow" d="M700 805 V840"/>
+  <path class="arrow" d="M700 805 H600 V800"/>
+  <text class="small" x="70" y="875">Output: personalized learning strategy, emotion analytics, AI notes PDF, auto exam, teacher/admin BI dashboard</text>
+</svg>

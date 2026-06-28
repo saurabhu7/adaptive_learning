@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Suggestions{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Suggested Courses</h1>
+    <p>Your mood is <strong>{{ mood|title }}</strong>. {% if mood in ['sad', 'stressed'] %}We are showing the gentlest order first.{% else %}We are showing the full track with advanced items first.{% endif %}</p>
+</section>
+
+<div class="page-card">
+    <p class="mb-20"><span class="pill">{{ category|category_label }}</span></p>
+    {% if courses %}
+        <div class="grid">
+            {% for course in courses %}
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>{{ course.title }}</h3>
+                    <p>{{ course.description }}</p>
+                    <div class="card-footer">
+                        <a class="btn btn-small" href="{{ url_for('learn_course', course_id=course.id) }}">Learn</a>
+                        <a class="btn btn-secondary btn-small" href="{{ url_for('exam', category=course.category) }}">Exam</a>
+                    </div>
+                    <div class="mt-20">
+                        {% if course.pdf_file %}
+                            <div><a href="{{ url_for('static', filename='uploads/pdfs/' + course.pdf_file) }}" target="_blank">Open PDF</a></div>
+                        {% endif %}
+                        {% if course.youtube_url %}
+                            <div><a href="{{ url_for('learn_course', course_id=course.id) }}">Start Learning</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="muted">No courses available for this category.</p>
+    {% endif %}
+</div>
+{% endblock %}

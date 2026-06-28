@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block head %}
+<style>
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-width: 230px;
+        align-items: center;
+    }
+
+    .action-buttons form {
+        display: inline-flex;
+        margin: 0;
+    }
+
+    .action-buttons .btn,
+    .action-buttons .action-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: #0f766e;
+        color: #ffffff;
+        border: 0;
+        box-shadow: 0 8px 18px rgba(15, 118, 110, 0.18);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.15;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .action-buttons .danger-action {
+        background: #dc2626;
+        box-shadow: 0 8px 18px rgba(220, 38, 38, 0.16);
+    }
+</style>
+{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Teacher Dashboard</h1>
+    <p>Welcome {{ user.username }}. Manage courses, monitor intervention quality, and improve student outcomes with research-driven analytics.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="grid-3">
+        <div class="stat-card">
+            <h3>Your Courses</h3>
+            <div class="value">{{ stats.course_count }}</div>
+        </div>
+        <div class="stat-card success">
+            <h3>Students on Platform</h3>
+            <div class="value">{{ stats.student_count }}</div>
+        </div>
+        <div class="stat-card warning">
+            <h3>Realtime Support Alerts</h3>
+            <div class="value">{{ stats.support_alerts }}</div>
+        </div>
+    </div>
+
+    <div class="feature-panel">
+        <div class="section-head">
+            <div>
+                <h2>Teacher Control Center</h2>
+                <p>Integrated panel for course delivery, adaptive support, and intervention outcomes.</p>
+            </div>
+            <div class="pill-row">
+                <span class="data-chip">{{ stats.attempt_count }} exam attempts</span>
+                <span class="data-chip">{{ stats.ai_ready_courses }} AI-ready courses</span>
+                <span class="data-chip">Paper-aligned emotion pipeline</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn" href="{{ url_for('addcourse') }}">Add New Course</a>
+            <a class="btn btn-secondary" href="{{ url_for('show_courses') }}">Open Course Catalog</a>
+            <a class="btn btn-secondary" href="{{ url_for('view_students') }}">View Students</a>
+            {% if user.role == 'admin' %}
+                <form action="{{ url_for('reset_domain_courses') }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-secondary" onclick="return confirm('Remove old courses and add fresh domain-wise catalog (IT, Non-IT, Data Science, Soft Skills)?');">Reset Domain Courses</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Recent Realtime Alerts</h2>
+                    <p>See where students needed support during live lecture sessions.</p>
+                </div>
+            </div>
+            {% if recent_support %}
+                <div class="activity-feed">
+                    {% for insight in recent_support %}
+                        <div class="activity-item">
+                            <strong>{{ insight.student_name }} | {{ insight.course_title }}</strong>
+                            <div class="muted">{{ insight.created_at }}</div>
+                            <p><span class="status-dot {% if insight.emotion in ['confused', 'sad', 'fear', 'stressed'] %}danger{% elif insight.emotion in ['bored', 'disgust'] %}warning{% else %}success{% endif %}"></span>{{ insight.emotion|title }} detected</p>
+                            <p>{{ insight.strategy_text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No realtime support alerts have been generated yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Category Analytics</h2>
+                    <p>Compare learning outcomes and support events by category.</p>
+                </div>
+            </div>
+            {% if performance_by_category %}
+                <div class="activity-feed">
+                    {% for category in performance_by_category %}
+                        <div class="activity-item">
+                            <strong>{{ category.category|category_label }}</strong>
+                            <p>{{ category.course_count }} course(s) | {{ category.attempts }} attempt(s)</p>
+                            <p>Average score {{ category.average_score }}% | Support events {{ category.support_events }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">Analytics will appear after you publish courses and students start learning.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>At-Risk Learners</h2>
+                    <p>Prioritize these students for intervention based on support load and negative emotion patterns.</p>
+                </div>
+            </div>
+            {% if at_risk_students %}
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Support Events</th>
+                                <th>Negative Events</th>
+                                <th>Avg Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in at_risk_students %}
+                                <tr>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ item.support_events }}</td>
+                                    <td>{{ item.negative_events }}</td>
+                                    <td>{{ item.avg_score }}%</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-state">At-risk list will appear once lecture analytics are collected.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Managed Courses</h2>
+                <p>Each course is linked to lecture learning, live support, and performance measurement.</p>
+            </div>
+        </div>
+        {% if courses %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Subject</th>
+                            <th>Order</th>
+                            <th>Exam Attempts</th>
+                            <th>Avg Score</th>
+                            <th>Support Alerts</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                            <tr>
+                                <td>{{ course.title }}</td>
+                                <td>{{ course.category|category_label }}</td>
+                                <td>{{ course.subject }}</td>
+                                <td>{{ course.course_index }}</td>
+                                <td>{{ course.attempt_count }}</td>
+                                <td>{{ course.average_score }}%</td>
+                                <td>{{ course.support_count }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                    <a class="action-link" href="{{ url_for('learn_course', course_id=course.id) }}">Open</a>
+                                    <a class="action-link" href="{{ url_for('edit_course', course_id=course.id) }}">Edit</a>
+                                    <form action="{{ url_for('generate_course_notes', course_id=course.id) }}" method="post">
+                                        <button type="submit" class="btn btn-small">Generate Notes</button>
+                                    </form>
+                                    <form action="{{ url_for('generate_course_exam', course_id=course.id) }}" method="post">
+                                        <button type="submit" class="btn btn-small">Generate Exam</button>
+                                    </form>
+                                    {% if course.pdf_file %}
+                                        <a class="action-link" href="{{ url_for('static', filename='uploads/pdfs/' + course.pdf_file) }}" target="_blank">PDF</a>
+                                    {% endif %}
+                                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
+                                        <button type="submit" class="btn btn-small danger-action" onclick="return confirm('Delete this course and its related records?');">Delete</button>
+                                    </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No courses added yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Course Delivery Readiness</h2>
+                <p>Check lecture coverage, AI notes, and quiz generation status for each course.</p>
+            </div>
+        </div>
+        {% if course_delivery_health %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Lectures</th>
+                            <th>AI Asset</th>
+                            <th>Quiz Items</th>
+                            <th>Notes PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in course_delivery_health %}
+                            <tr>
+                                <td>{{ row.title }}</td>
+                                <td>{{ row.category|category_label }}</td>
+                                <td>{{ row.lecture_count }}</td>
+                                <td>{{ 'Ready' if row.ai_asset_ready else 'Pending' }}</td>
+                                <td>{{ row.quiz_items }}</td>
+                                <td>{{ 'Ready' if row.notes_ready else 'Pending' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">Delivery readiness will appear after adding courses and lecture playlists.</p>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Strategy Effectiveness</h2>
+                <p>Track which adaptive strategy is showing better student recovery on your courses.</p>
+            </div>
+        </div>
+        {% if strategy_effectiveness %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Strategy</th>
+                            <th>Used</th>
+                            <th>Recovery Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in strategy_effectiveness %}
+                            <tr>
+                                <td>{{ item.strategy_code }}</td>
+                                <td>{{ item.used_count }}</td>
+                                <td>{{ item.recovery_rate }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">Strategy effectiveness will appear once live sessions produce outcomes.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

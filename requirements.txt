@@ -1,0 +1,10 @@
+# Core web app
+Flask>=3.0,<4.0
+Werkzeug>=3.0,<4.0
+PyMySQL>=1.1,<2.0
+
+# Emotion analysis used by the included trained model
+numpy>=1.26,<3.0
+opencv-python>=4.10,<5.0
+youtube-transcript-api>=0.6.2,<1.0
+fpdf2>=2.8.1,<3.0

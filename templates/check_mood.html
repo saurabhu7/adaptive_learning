@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Check Mood{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Mood Check</h1>
+    <p>Camera-based analysis was replaced with a stable form so the flow works reliably on every machine.</p>
+</section>
+
+<div class="page-card" style="max-width: 760px; margin: 0 auto;">
+    <p class="mb-20"><span class="pill">Category: {{ category|category_label }}</span></p>
+    <form action="{{ url_for('process_mood') }}" method="post">
+        <input type="hidden" name="category" value="{{ category }}">
+        <div class="form-group">
+            <label for="mood">How are you feeling right now?</label>
+            <select id="mood" name="mood" required>
+                <option value="">Select mood</option>
+                <option value="happy">Happy</option>
+                <option value="focused">Focused</option>
+                <option value="neutral">Neutral</option>
+                <option value="sad">Sad</option>
+                <option value="stressed">Stressed</option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Get Suggestions</button>
+    </form>
+</div>
+{% endblock %}

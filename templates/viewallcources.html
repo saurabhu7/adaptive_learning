@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Integrated Course Catalog</h1>
+    <p>Browse every course in the platform with linked learning sessions, video content, notes, and assessment support.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="feature-panel">
+        <div class="section-head">
+            <div>
+                <h2>Browse by Category</h2>
+                <p>Use the category filters to navigate the complete course database.</p>
+            </div>
+            <div class="pill-row">
+                <a class="data-chip" href="{{ url_for('show_courses') }}">All</a>
+                {% for item in categories %}
+                    <a class="data-chip" href="{{ url_for('show_courses', category=item.category) }}">{{ item.category|category_label }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% if selected_category %}
+            <p>Showing filtered category: <strong>{{ selected_category|category_label }}</strong></p>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        {% if courses %}
+            <div class="grid">
+                {% for course in courses %}
+                    {% set is_subscribed = course.id in subscribed_course_ids %}
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h3>{{ course.title }}</h3>
+                        <p>{{ course.description }}</p>
+                        <div class="pill-row">
+                            <span class="pill">{{ course.category|category_label }}</span>
+                            <span class="pill">{{ course.subject }}</span>
+                            {% if course.teacher_name %}
+                                <span class="pill">{{ course.teacher_name }}</span>
+                            {% endif %}
+                            {% if current_user and current_user['role'] == 'student' %}
+                                <span class="pill">Price ₹799</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            {% if current_user and current_user['role'] == 'student' %}
+                                {% if is_subscribed %}
+                                    <a class="btn btn-small" href="{{ url_for('course_content', course_id=course.id) }}">Open Course</a>
+                                    <a class="btn btn-secondary btn-small" href="{{ url_for('learn_course', course_id=course.id) }}">Live Lecture</a>
+                                    <a class="btn btn-secondary btn-small" href="{{ url_for('exam_course', course_id=course.id) }}">Exam</a>
+                                {% else %}
+                                    <form action="{{ url_for('subscribe_course', course_id=course.id) }}" method="post">
+                                        <button class="btn btn-small" type="submit">Subscribe ₹799</button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <a class="btn btn-small" href="{{ url_for('learn_course', course_id=course.id) }}">Open Course</a>
+                            {% endif %}
+                            {% if current_user and current_user['role'] in ['teacher', 'admin'] %}
+                                <a class="btn btn-secondary btn-small" href="{{ url_for('edit_course', course_id=course.id) }}">Edit</a>
+                                <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
+                                    <button type="submit" class="btn btn-secondary btn-small" onclick="return confirm('Delete this course and its related records?');">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                        <div class="mt-20">
+                            {% if course.pdf_file %}
+                                <div><a href="{{ url_for('static', filename='uploads/pdfs/' + course.pdf_file) }}" target="_blank">Open PDF Notes</a></div>
+                            {% endif %}
+                            {% if course.youtube_url and (not current_user or current_user['role'] != 'student' or is_subscribed) %}
+                                <div><a href="{{ url_for('learn_course', course_id=course.id) }}">Start Learning</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No courses found for this category.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Exam Result{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Exam Result</h1>
+    <p>Your latest submission has been saved.</p>
+</section>
+
+<div class="page-card" style="max-width: 760px; margin: 0 auto;">
+    <div class="grid-2">
+        <div class="stat-card">
+            <h3>Student</h3>
+            <div class="value" style="font-size: 24px;">{{ attempt.username }}</div>
+        </div>
+        <div class="stat-card success">
+            <h3>Score</h3>
+            <div class="value">{{ attempt.score }}/{{ attempt.total_questions }}</div>
+        </div>
+    </div>
+    <div class="mt-30">
+        <p><strong>Course / Category:</strong> {{ attempt.course_title or (attempt.category|category_label) }}</p>
+        <p><strong>Percentage:</strong> {{ percentage }}%</p>
+        <p><strong>Submitted At:</strong> {{ attempt.created_at }}</p>
+    </div>
+    <div class="card-footer mt-30">
+        <a class="btn" href="{{ url_for('student_dashboard') if current_user['role'] == 'student' else url_for('dashboard') }}">Back to Dashboard</a>
+        {% if current_user['role'] == 'student' %}
+            <a class="btn btn-secondary" href="{{ url_for('exam', category=attempt.category) }}">Retry Exam</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

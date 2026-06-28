@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>FER2013 Model Evaluation</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#111827;margin:0;padding:28px;}
+.sheet{max-width:1180px;margin:auto;background:white;border:1px solid #d7dee9;border-radius:12px;padding:28px;box-shadow:0 10px 30px rgba(15,23,42,.10);}
+h1{margin:0 0 6px;font-size:28px;} h2{margin-top:28px;border-bottom:2px solid #e5e7eb;padding-bottom:8px;font-size:20px;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0;}
+.card{border:1px solid #dbe3ef;border-radius:8px;padding:14px;background:#f9fbff;}
+.k{font-size:12px;text-transform:uppercase;color:#64748b;font-weight:700;} .v{font-size:24px;font-weight:800;margin-top:4px;}
+table{border-collapse:collapse;width:100%;font-size:14px;} th,td{border:1px solid #d8e0ec;padding:8px;text-align:center;} th{background:#eef4ff;font-weight:800;} td:first-child, th:first-child{text-align:left;font-weight:700;}
+.note{color:#475569;font-size:14px;line-height:1.5;}
+</style></head><body><div class="sheet">
+<h1>FER2013 Emotion Model Evaluation</h1><div class="note">Dataset: FER2013 | Algorithm: NumPy MLP classifier | Input: 48x48 grayscale | Classes: angry, disgust, fear, happy, neutral, sad, surprise</div>
+<div class="grid">
+<div class="card"><div class="k">Training Accuracy</div><div class="v">44.03%</div></div>
+<div class="card"><div class="k">Validation Accuracy</div><div class="v">38.35%</div></div>
+<div class="card"><div class="k">Test Accuracy</div><div class="v">38.56%</div></div>
+<div class="card"><div class="k">Test Samples</div><div class="v">7178</div></div>
+</div>
+<h2>Confusion Matrix</h2><table><thead><tr><th>Actual / Predicted</th><th>angry</th><th>disgust</th><th>fear</th><th>happy</th><th>neutral</th><th>sad</th><th>surprise</th></tr></thead><tbody><tr><th>angry</th><td>363</td><td>0</td><td>157</td><td>192</td><td>116</td><td>56</td><td>74</td></tr>
+<tr><th>disgust</th><td>37</td><td>0</td><td>28</td><td>25</td><td>10</td><td>5</td><td>6</td></tr>
+<tr><th>fear</th><td>234</td><td>0</td><td>260</td><td>178</td><td>100</td><td>79</td><td>173</td></tr>
+<tr><th>happy</th><td>240</td><td>0</td><td>123</td><td>1121</td><td>99</td><td>97</td><td>94</td></tr>
+<tr><th>neutral</th><td>239</td><td>0</td><td>139</td><td>272</td><td>363</td><td>102</td><td>118</td></tr>
+<tr><th>sad</th><td>312</td><td>0</td><td>229</td><td>249</td><td>162</td><td>196</td><td>99</td></tr>
+<tr><th>surprise</th><td>88</td><td>0</td><td>118</td><td>83</td><td>57</td><td>20</td><td>465</td></tr></tbody></table>
+<h2>Accuracy, Precision, Recall, F1-Score</h2><table><thead><tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-score</th><th>Support</th></tr></thead><tbody><tr><td>angry</td><td>23.99%</td><td>37.89%</td><td>29.38%</td><td>958</td></tr>
+<tr><td>disgust</td><td>0.00%</td><td>0.00%</td><td>0.00%</td><td>111</td></tr>
+<tr><td>fear</td><td>24.67%</td><td>25.39%</td><td>25.02%</td><td>1024</td></tr>
+<tr><td>happy</td><td>52.88%</td><td>63.19%</td><td>57.58%</td><td>1774</td></tr>
+<tr><td>neutral</td><td>40.02%</td><td>29.44%</td><td>33.93%</td><td>1233</td></tr>
+<tr><td>sad</td><td>35.32%</td><td>15.72%</td><td>21.75%</td><td>1247</td></tr>
+<tr><td>surprise</td><td>45.19%</td><td>55.96%</td><td>50.00%</td><td>831</td></tr><tr><td>Accuracy</td><td></td><td></td><td>38.56%</td><td>7178</td></tr><tr><td>Macro Avg</td><td>31.72%</td><td>32.51%</td><td>31.09%</td><td>7178</td></tr><tr><td>Weighted Avg</td><td>38.03%</td><td>38.56%</td><td>37.12%</td><td>7178</td></tr></tbody></table>
+<h2>Technology Stack</h2><div class="note">Frontend: HTML/CSS/JavaScript | Backend: Flask Python | Database: MySQL/XAMPP | AI: OpenCV, NumPy, FER2013 trained model | Notes/Quiz: Gemini API + Grok fallback</div>
+</div></body></html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Exam{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>{{ course_title if course_title else (category|category_label) }} Exam</h1>
+    {% if source_label %}
+        <p><span class="pill">{{ source_label }}</span></p>
+    {% endif %}
+    <p>{{ total }} multiple-choice questions. Submit once to calculate and save your score.</p>
+</section>
+
+<div class="page-card">
+    <form method="post">
+        {% for question in questions %}
+            <div class="card mb-20" style="padding: 22px;">
+                <h3>{{ loop.index }}. {{ question.question }}</h3>
+                <div class="mt-20">
+                    {% set question_index = loop.index %}
+                    {% for option in question.options %}
+                        <label class="list-item" style="align-items: center; padding: 10px 0; border-bottom: 0;">
+                            <span>
+                                <input type="radio" name="answer_{{ question_index }}" value="{{ option }}" required>
+                            </span>
+                            <span>{{ option }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Submit Exam</button>
+    </form>
+</div>
+{% endblock %}

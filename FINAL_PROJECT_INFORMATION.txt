@@ -1,0 +1,119 @@
+ADAPTIVE LEARNING PLATFORM - FINAL PROJECT REVIEW NOTE
+=====================================================
+
+1) Project Overview
+-------------------
+This project is a Flask-based adaptive learning platform with role-based access and real-time support.
+Main objective:
+- Predict student learning support strategies using facial-expression-driven session analysis.
+- Improve student outcomes through adaptive explanations, live quizzes, and guided interventions.
+
+Core roles:
+- Student
+- Teacher
+- Admin
+
+2) Key Functional Modules
+-------------------------
+A) Authentication and Roles
+- Login/Register/Logout
+- Role-based route protection
+
+B) Course Management
+- Add Course
+- Edit/Update Course
+- Delete Course
+- Domain-wise catalog reset (IT, Non-IT, Data Science, Soft Skills)
+- Optional YouTube playlist import for lecture list
+
+C) Learning and Live Session
+- Live lecture screen with 60/40 layout
+- Camera-based emotion detection pipeline
+- Adaptive strategy and simple explanation generation
+- Live MCQ interaction and wrong-answer easy strategy feedback
+- Emotion feedback endpoint for calibration improvement
+
+D) Notes and Content Generation
+- Download Notes button in live lecture and course flow
+- YouTube transcript-aware note generation
+- Long PDF notes generation (minimum 10 pages)
+- 20 question-answer item generation for revision
+- Grok + Gemini provider fallback for AI content generation
+
+E) Dashboards and Analytics
+- Student Dashboard:
+  - Per-course analysis
+  - BI metrics (performance index, risk band, trend, emotion distribution)
+- Teacher Dashboard:
+  - Course and student performance monitoring
+  - Strategy effectiveness view
+- Admin Dashboard:
+  - Platform-wide monitoring
+  - Student selector to open full student dashboard-level analytics in admin panel
+
+3) Security and Cleanup Applied
+-------------------------------
+- Removed parent dashboard flow from active project.
+- Removed exposed API key sample value from .env.example.
+- Tightened role access on sensitive dashboards.
+- Added secure cookie and session configuration.
+- Added baseline security headers:
+  - X-Content-Type-Options
+  - X-Frame-Options
+  - Referrer-Policy
+  - Permissions-Policy
+- Added minimum password length validation for account creation.
+
+4) Database Highlights
+----------------------
+Main analytics and adaptive tables include:
+- session_insights
+- emotion_events
+- strategy_recommendations
+- intervention_outcomes
+- student_profiles
+- emotion_feedback
+- course_ai_assets
+- course_lectures
+
+5) Environment Configuration (Important)
+----------------------------------------
+Set these in environment or .env:
+- SECRET_KEY
+- MYSQL_HOST
+- MYSQL_PORT
+- MYSQL_USER
+- MYSQL_PASSWORD
+- MYSQL_DATABASE
+- GEMINI_API_KEY (optional but recommended)
+- GROK_API_KEY (optional)
+- AI_PROVIDER (auto/grok/gemini)
+- YOUTUBE_API_KEY (required for full playlist import)
+- SESSION_COOKIE_SECURE=1 (when running behind HTTPS)
+
+6) Run Instructions
+-------------------
+1. Install dependencies:
+   pip install -r requirements.txt
+2. Ensure MySQL server is running and schema credentials are correct.
+3. Start app:
+   python app.py
+4. Open:
+   http://127.0.0.1:5000
+
+7) Demo Accounts
+----------------
+- student@example.com / student123
+- teacher@example.com / teacher123
+- admin@example.com / admin123
+
+8) Suggested Final Review Checklist
+-----------------------------------
+- Verify role-wise login and dashboard navigation.
+- Add/edit/delete/update a course from teacher/admin flows.
+- Test playlist import with valid YOUTUBE_API_KEY.
+- Open live lecture, run camera analysis, and verify adaptive responses.
+- Download generated notes PDF and verify 10-page + 20 Q/A output.
+- In Admin dashboard, select a student and verify complete analytics section.
+
+End of final project information.

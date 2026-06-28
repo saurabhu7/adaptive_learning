@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Course Content{% endblock %}
+{% block head %}
+<style>
+    .lecture-start-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid #93c5fd;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        min-width: 118px;
+    }
+
+    .lecture-start-btn:hover {
+        background: #dbeafe;
+        border-color: #60a5fa;
+        color: #1e40af;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>{{ course.title }}</h1>
+    <p>Class-style course structure with lecture list, adaptive notes, and direct live learning access.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="feature-panel">
+        <div class="section-head">
+            <div>
+                <h2>{{ course.category|category_label }} | {{ course.subject }}</h2>
+                <p>{{ course.description }}</p>
+            </div>
+            <div class="pill-row">
+                <span class="data-chip">{{ lectures|length }} lecture(s)</span>
+                <span class="data-chip">Adaptive learning enabled</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn" href="{{ url_for('learn_course', course_id=course.id) }}">Start Live Learning</a>
+            <a class="btn btn-secondary" href="{{ url_for('download_course_notes', course_id=course.id) }}" target="_blank" rel="noopener">Download Notes</a>
+            <a class="btn btn-secondary" href="{{ url_for('exam_course', course_id=course.id) }}">Take Exam</a>
+        </div>
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>All Course Lectures</h2>
+                <p>Open any lecture directly in the interactive learning session.</p>
+            </div>
+        </div>
+        {% if lectures %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Lecture</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lecture in lectures %}
+                            <tr>
+                                <td>{{ lecture.lecture_index }}</td>
+                                <td>{{ lecture.title }}</td>
+                                <td><a class="lecture-start-btn" href="{{ url_for('learn_course', course_id=course.id, lecture_id=lecture.id) }}">Start Course</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">No lecture list is available yet for this course.</p>
+        {% endif %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Adaptive Notes</h2>
+                <p>AI-generated notes and quiz are built from lecture content to support revision.</p>
+            </div>
+        </div>
+        {% if ai_asset %}
+            <p><strong>Last Updated:</strong> {{ ai_asset.updated_at }}</p>
+            <p><strong>Provider:</strong> {{ ai_asset.provider|upper }}</p>
+            {% if ai_asset.pdf_file %}
+                <a class="btn btn-secondary btn-small" href="{{ url_for('static', filename='uploads/notes/' + ai_asset.pdf_file) }}" target="_blank">Open Latest Notes PDF</a>
+            {% endif %}
+        {% else %}
+            <p class="empty-state">Notes are not generated yet. Click Download Notes to create them.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

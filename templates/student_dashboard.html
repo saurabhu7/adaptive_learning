@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Student Learning Hub</h1>
+    <p>Courses, exams, interview preparation, and learning progress in one place.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Courses</h2>
+                <p>Courses are sorted domain-wise: IT, Non-IT, Data Science, and Soft Skills.</p>
+            </div>
+        </div>
+        {% for domain in domain_order %}
+            <div class="section-head mt-20">
+                <div>
+                    <h3>{{ domain|category_label }}</h3>
+                </div>
+            </div>
+            {% if grouped_courses[domain] %}
+                <div class="grid">
+                    {% for course in grouped_courses[domain] %}
+                        {% set is_subscribed = course.id in subscribed_course_ids %}
+                        <div class="card">
+                            <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                            <h3>{{ course.title }}</h3>
+                            <p>{{ course.description }}</p>
+                            <div class="pill-row">
+                                <span class="pill">{{ domain|category_label }}</span>
+                                <span class="pill">{{ course.subject }}</span>
+                                <span class="pill">Price ₹799</span>
+                            </div>
+                            <div class="card-footer">
+                                {% if is_subscribed %}
+                                    <a class="btn btn-small" href="{{ url_for('course_content', course_id=course.id) }}">Course Content</a>
+                                    <a class="btn btn-secondary btn-small" href="{{ url_for('learn_course', course_id=course.id) }}">Live Lecture</a>
+                                    <a class="btn btn-secondary btn-small" href="{{ url_for('download_course_notes', course_id=course.id) }}" target="_blank" rel="noopener">Notes</a>
+                                {% else %}
+                                    <form action="{{ url_for('subscribe_course', course_id=course.id) }}" method="post">
+                                        <button class="btn btn-small" type="submit">Subscribe ₹799</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No {{ domain|category_label }} courses available.</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Exams by Course</h2>
+                <p>Take course-wise exams directly and track score-based learning progress.</p>
+            </div>
+        </div>
+        <div class="grid">
+            {% for course in courses %}
+                {% set is_subscribed = course.id in subscribed_course_ids %}
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <h3>{{ course.title }} Exam</h3>
+                    <p>Assess your understanding for {{ course.subject }} and improve weak topics.</p>
+                    <div class="pill-row">
+                        <span class="pill">{{ course.category|category_label }}</span>
+                        <span class="pill">Price ₹799</span>
+                    </div>
+                    <div class="card-footer">
+                        {% if is_subscribed %}
+                            <a class="btn btn-small" href="{{ url_for('exam_course', course_id=course.id) }}">Start Course Exam</a>
+                            <a class="btn btn-secondary btn-small" href="{{ url_for('exam_home') }}">More Exams</a>
+                        {% else %}
+                            <form action="{{ url_for('subscribe_course', course_id=course.id) }}" method="post">
+                                <button class="btn btn-small" type="submit">Subscribe ₹799</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Interview Preparation</h2>
+                <p>Special focus tracks for communication, confidence, and interview-ready performance.</p>
+            </div>
+        </div>
+        {% if interview_courses %}
+            <div class="grid">
+                {% for course in interview_courses %}
+                    {% set is_subscribed = course.id in subscribed_course_ids %}
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+                        <h3>{{ course.title }}</h3>
+                        <p>{{ course.description }}</p>
+                        <div class="pill-row">
+                            <span class="pill">{{ course.category|category_label }}</span>
+                            <span class="pill">{{ course.subject }}</span>
+                            <span class="pill">Price ₹799</span>
+                        </div>
+                        <div class="card-footer">
+                            {% if is_subscribed %}
+                                <a class="btn btn-small" href="{{ url_for('course_content', course_id=course.id) }}">Course Content</a>
+                                <a class="btn btn-secondary btn-small" href="{{ url_for('learn_course', course_id=course.id) }}">Live Lecture</a>
+                                <a class="btn btn-secondary btn-small" href="{{ url_for('exam', category=course.category) }}">Interview Quiz</a>
+                            {% else %}
+                                <form action="{{ url_for('subscribe_course', course_id=course.id) }}" method="post">
+                                    <button class="btn btn-small" type="submit">Subscribe ₹799</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No interview preparation courses available yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="grid-2">
+        <div class="page-card">
+            <div class="section-head">
+                <div>
+                    <h2>Recent Exam Results</h2>
+                    <p>Track score movement and exam consistency.</p>
+                </div>
+            </div>
+            {% if recent_attempts %}
+                <div class="activity-feed">
+                    {% for attempt in recent_attempts %}
+                        <div class="activity-item">
+                            <strong>{{ attempt.course_title or (attempt.category|category_label) }}</strong>
+                            <div class="muted">{{ attempt.created_at }}</div>
+                            <p>Score: {{ attempt.score }}/{{ attempt.total_questions }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No exam attempts yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="page-card">
+        <div class="section-head">
+            <div>
+                <h2>Course Content Readiness</h2>
+                <p>Quick view of lecture availability, AI notes, and quiz coverage.</p>
+            </div>
+        </div>
+        {% if course_content_readiness %}
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Category</th>
+                            <th>Lectures</th>
+                            <th>AI Notes</th>
+                            <th>Quiz Items</th>
+                            <th>PDF Notes</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in course_content_readiness %}
+                            {% set is_subscribed = row.id in subscribed_course_ids %}
+                            <tr>
+                                <td>{{ row.title }}</td>
+                                <td>{{ row.category|category_label }}</td>
+                                <td>{{ row.lecture_count }}</td>
+                                <td>{{ 'Ready' if row.ai_asset_ready else 'Pending' }}</td>
+                                <td>{{ row.quiz_items }}</td>
+                                <td>{{ 'Ready' if row.notes_ready else 'Pending' }}</td>
+                                <td>
+                                    {% if is_subscribed %}
+                                        <a class="btn btn-small" href="{{ url_for('course_content', course_id=row.id) }}">Open</a>
+                                    {% else %}
+                                        <form action="{{ url_for('subscribe_course', course_id=row.id) }}" method="post">
+                                            <button class="btn btn-small" type="submit">Subscribe ₹799</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-state">Course readiness will appear once content is generated.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

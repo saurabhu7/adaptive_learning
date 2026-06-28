@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Students</h1>
+    <p>All student accounts stored in the database.</p>
+</section>
+
+<div class="page-card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in records %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.username }}</td>
+                    <td>{{ row.email }}</td>
+                    <td>{{ row.mobile }}</td>
+                    <td>{{ row.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

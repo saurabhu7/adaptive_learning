@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Add Course{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Create New Course</h1>
+    <p>Add a course into the final project platform with subject details, learning order, lecture video, and PDF notes.</p>
+</section>
+
+<div class="dashboard-shell">
+    <div class="feature-panel">
+        <div class="section-head">
+            <div>
+                <h2>Course Publishing Workflow</h2>
+                <p>The course created here becomes available in the student dashboard, live lecture session, exam flow, and admin monitoring panel.</p>
+            </div>
+            <div class="pill-row">
+                <span class="data-chip">Frontend integrated</span>
+                <span class="data-chip">Backend integrated</span>
+                <span class="data-chip">Database integrated</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-card">
+        <form action="{{ url_for('add_course') }}" method="post" enctype="multipart/form-data">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="course_name">Course Title</label>
+                    <input id="course_name" name="course_name" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input id="subject" name="subject" type="text" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select category</option>
+                        <option value="it">IT</option>
+                        <option value="non-it">Non-IT</option>
+                        <option value="datascience">Data Science</option>
+                        <option value="softskills">Soft Skills</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="course_index">Course Order</label>
+                    <input id="course_index" name="course_index" type="number" min="1" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input id="description" name="description" type="text" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="pdf">PDF Notes</label>
+                    <input id="pdf" name="pdf" type="file" accept=".pdf,application/pdf">
+                </div>
+                <div class="form-group">
+                    <label for="youtube">YouTube URL</label>
+                    <input id="youtube" name="youtube" type="url" placeholder="https://youtube.com/...">
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn">Publish Course</button>
+                <a class="btn btn-secondary" href="{{ url_for('teacher_dashboard') if current_user and current_user['role'] == 'teacher' else url_for('admin_dashboard') }}">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
